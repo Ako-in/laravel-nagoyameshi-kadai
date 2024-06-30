@@ -59,6 +59,7 @@ class AuthenticationTest extends TestCase
          ]);
         // Userが認証されていない
          $this->assertGuest();
+         
      }
  
      public function test_admins_can_logout(): void

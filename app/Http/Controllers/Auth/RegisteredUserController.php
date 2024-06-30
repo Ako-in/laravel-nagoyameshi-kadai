@@ -60,6 +60,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
         
-        return redirect()->route('/verify-email');
+        return redirect('/verify-email');
     }
 }
