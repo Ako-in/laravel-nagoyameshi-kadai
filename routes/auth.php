@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
 
@@ -39,7 +40,7 @@ Route::middleware(['guest','guest:admin'])->group(function () {
 Route::middleware('guest:admin')->group(function () {
     Route::get('admin/login', [Admin\Auth\AuthenticatedSessionController::class, 'create'])
                 ->name('admin.login');
-
+    
     Route::post('admin/login', [Admin\Auth\AuthenticatedSessionController::class, 'store']);
 });
 
@@ -70,4 +71,5 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth:admin')->group(function () {
     Route::post('admin/logout', [Admin\Auth\AuthenticatedSessionController::class, 'destroy'])
                 ->name('admin.logout');
+    // Route::post('admin.users.index',[Admin\UserController::class,'index'])->name('admin.users.index');
 });

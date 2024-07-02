@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Admin\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +34,5 @@ require __DIR__.'/auth.php';
 
 Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],function(){
     Route::get('home',[Admin\HomeController::class,'index'])->name('home');
+    Route::post('users/index',[Admin\UserController::class,'index'])->name('users.index');
 });
