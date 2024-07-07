@@ -34,5 +34,8 @@ require __DIR__.'/auth.php';
 
 Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],function(){
     Route::get('home',[Admin\HomeController::class,'index'])->name('home');
-    Route::post('users/index',[Admin\UserController::class,'index'])->name('users.index');
+    Route::get('users/index',[Admin\UserController::class,'index'])->name('users.index');
+    // Route::post('users/{id}',[Admin\UserController::class,'show'])->whereNumber('id')->name('users.show');
+    Route::get('users/{id}',[Admin\UserController::class,'show'])->name('users.show');
 });
+

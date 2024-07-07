@@ -11,123 +11,126 @@
                     </ol>
                 </nav>
 
-                <h1 class="mb-4 text-center">{{ $user->name }}</h1>
+                @foreach ($users as $user)
+                    <h1 class="mb-4 text-center">{{ $user->name }}</h1>
 
-                <div class="container mb-4">
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">ID</span>
+                    <div class="container mb-4">
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">ID</span>
+                            </div>
+
+                            <div class="col">
+                                <span>{{ $user->id }}</span>
+                            </div>
                         </div>
 
-                        <div class="col">
-                            <span>{{ $user->id }}</span>
-                        </div>
-                    </div>
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">氏名</span>
+                            </div>
 
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">氏名</span>
-                        </div>
-
-                        <div class="col">
-                            <span>{{ $user->name }}</span>
-                        </div>
-                    </div>
-
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">フリガナ</span>
+                            <div class="col">
+                                <span>{{ $user->name }}</span>
+                            </div>
                         </div>
 
-                        <div class="col">
-                            <span>{{ $user->kana }}</span>
-                        </div>
-                    </div>
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">フリガナ</span>
+                            </div>
 
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">メールアドレス</span>
-                        </div>
-
-                        <div class="col">
-                            <span>{{ $user->email }}</span>
-                        </div>
-                    </div>
-
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">郵便番号</span>
+                            <div class="col">
+                                <span>{{ $user->kana }}</span>
+                            </div>
                         </div>
 
-                        <div class="col">
-                            <span>{{ substr($user->postal_code, 0, 3) . '-' . substr($user->postal_code, 3) }}</span>
-                        </div>
-                    </div>
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">メールアドレス</span>
+                            </div>
 
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">住所</span>
-                        </div>
-
-                        <div class="col">
-                            <span>{{ $user->address }}</span>
-                        </div>
-                    </div>
-
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">電話番号</span>
+                            <div class="col">
+                                <span>{{ $user->email }}</span>
+                            </div>
                         </div>
 
-                        <div class="col">
-                            <span>{{ $user->phone_number }}</span>
-                        </div>
-                    </div>
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">郵便番号</span>
+                            </div>
 
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">誕生日</span>
+                            <div class="col">
+                                <span>{{ substr($user->postal_code, 0, 3) . '-' . substr($user->postal_code, 3) }}</span>
+                            </div>
                         </div>
 
-                        <div class="col">
-                            <span>
-                                @if ($user->birthday !== null)
-                                    {{ date('n月j日', strtotime($user->birthday)) }}
-                                @else
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">住所</span>
+                            </div>
+
+                            <div class="col">
+                                <span>{{ $user->address }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">電話番号</span>
+                            </div>
+
+                            <div class="col">
+                                <span>{{ $user->phone_number }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">誕生日</span>
+                            </div>
+
+                            <div class="col">
+                                <span>
+                                    @if ($user->birthday !== null)
+                                        {{ date('n月j日', strtotime($user->birthday)) }}
+                                    @else
+                                        未設定
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">職業</span>
+                            </div>
+
+                            <div class="col">
+                                <span>
+                                    @if ($user->occupation !== null)
+                                        {{ $user->occupation }}
+                                    @else
+                                        未設定
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row pb-2 mb-2 border-bottom">
+                            <div class="col-3">
+                                <span class="fw-bold">会員種別</span>
+                            </div>
+
+                            <div class="col">
+                                <span>
                                     未設定
-                                @endif
-                            </span>
+                                </span>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">職業</span>
-                        </div>
-
-                        <div class="col">
-                            <span>
-                                @if ($user->occupation !== null)
-                                    {{ $user->occupation }}
-                                @else
-                                    未設定
-                                @endif
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="row pb-2 mb-2 border-bottom">
-                        <div class="col-3">
-                            <span class="fw-bold">会員種別</span>
-                        </div>
-
-                        <div class="col">
-                            <span>
-                                未設定
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
+            
             </div>
         </div>
     </div>

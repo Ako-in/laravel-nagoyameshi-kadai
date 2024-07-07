@@ -7,27 +7,29 @@ use Illuminate\Http\Request;
 use App\Models\User;
 
 
+use Illuminate\Support\Facades\DB;
+
+
 
 class UserController extends Controller
 {
     public function index(Request $request){
+
+        $users = User::query();
         $keyword = $request->input('keyword');
-        // $total = DB::table('users')->get();
-        
-        // $users = User::paginate(15);
-        
-        if($request->user !== null){
-            $users = User::where('name','LIKE',"%{$keyword}%")->paginate(15);
-        }elseif($keyword !== null ){
-            $users = User::where('kana','LIKE',"%{$keyword}%")->paginate(15);
-        }else{
-            $users = User::paginate(15);
+        if(!empty($keyword)){
+            $users->where('name','LIKE',"%{$keyword}%")
+            ->orWhere('kana','LIKE',"%{$keyword}%");;
         }
-       
-        return view('admin.users.index',compact('admin.users.index','keyword'));
+
+        $users = $users->paginate(15);
+        $total = $users->total();
+        return view('admin.users.index',compact('users','keyword','total'));
+
     }
 
-    public function store(Request $request){
-        $user = new User();
+    public function show($id){ 
+        $users = User::where('id',$id)->get();
+        return view('admin.users.show',compact('users','id'));
     }
 }
