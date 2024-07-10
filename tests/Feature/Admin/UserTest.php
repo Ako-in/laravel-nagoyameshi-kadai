@@ -20,11 +20,11 @@ class UserTest extends TestCase
     // ログイン済みの一般ユーザーは管理者側の会員一覧ページにアクセスできない
     // ログイン済みの管理者は管理者側の会員一覧ページにアクセスできる
 
-    public function test_not_login_user_cannot_access(): void
-        // OK!!!未ログインのユーザーは管理者側の会員一覧ページにアクセスできない
+    public function test_not_login_adminuser_cannot_access(): void
+        // OK!!!未ログインadminのユーザーは管理者側の会員一覧ページにアクセスできない
         {
             $response = $this->get('login');//未ログインの状態で'login'にアクセス
-            $user = User::factory()->create();// テストユーザー作成
+            // $admin = Admin::factory()->create();// テストユーザー作成
             $response = $this->get('admin/users/index');//アドミン一覧ページにアクセス
             $response->assertRedirect(route('admin.login'));
         }
@@ -34,7 +34,7 @@ class UserTest extends TestCase
         {
             $user = User::factory()->create();//テストユーザー作成
             $this->actingAs($user);//テストユーザーでログイン
-            $response = $this->get('admin/login');//アドミンページにアクセス
+            // $response = $this->get('admin/login');//アドミンページにアクセス
             $response = $this->get('admin/users/index');//アドミン一覧ページにアクセス
             $response->assertRedirect(route('admin.login'));
         }
@@ -59,11 +59,11 @@ class UserTest extends TestCase
     // ログイン済みの管理者は管理者側の会員詳細ページにアクセスできる
 
     public function test_not_login_user_cannot_access_to_admin_show(): void
-    // OK!!! ログインしていない一般ユーザー:管理者側の会員詳細ページにアクセスNG
+    // OK!!! ログインしていないユーザー:管理者側の会員詳細ページにアクセスNG
     {
         $response = $this->get('login');//未ログインの状態で'login'にアクセス
-        $user = User::factory()->create();// テストユーザー作成
-        $response = $this->get('admin/users/{id}');//アドミン会員詳細ページにアクセス
+        // $admin = Admin::factory()->create();// テストユーザー作成
+        $response = $this->get('admin/users/{1}');//アドミン会員詳細ページにアクセス
         $response->assertRedirect(route('admin.login'));
     }
 
@@ -74,7 +74,7 @@ class UserTest extends TestCase
         $user = User::factory()->create();//テストユーザー作成
         $this->actingAs($user);//テストユーザーでログイン
         $response = $this->get('admin/login');//アドミンページにアクセス
-        $response = $this->get('admin/users/{id}');//アドミン詳細ページにアクセス
+        $response = $this->get('admin/users/{1}');//アドミン詳細ページにアクセス
         $response->assertRedirect(route('admin.login'));
     }
 
@@ -85,8 +85,8 @@ class UserTest extends TestCase
         $admin->email= 'admin@example.com';
         $admin->password = Hash::make('nagoyameshi');
         $admin->save();
-            
-        $response = $this->actingAs($admin,'admin')->get('admin/users/{id}');
+        // データを一件とってきて確認する
+        $response = $this->actingAs($admin,'admin')->get('admin/users/{1}');
         $response->assertStatus(200);
     
     }
