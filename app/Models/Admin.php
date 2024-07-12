@@ -20,4 +20,6 @@ class Admin extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    const UPDATED_AT = null;
 }
