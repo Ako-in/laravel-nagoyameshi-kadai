@@ -22,4 +22,9 @@ class Admin extends Authenticatable
     ];
 
     const UPDATED_AT = null;
+
+    //Adminはたくさんのレストランを持っている
+    public function restaurants(){
+        return $this->hasMany(Restaurant::class);
+    }
 }
