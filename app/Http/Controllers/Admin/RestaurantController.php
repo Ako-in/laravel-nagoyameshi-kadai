@@ -126,9 +126,6 @@ class RestaurantController extends Controller
             // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
             $restaurant->image = basename($image);
         }
-            // }else{
-        //     $restaurant->image = '';
-        // }
         $restaurant->save();
 
         // // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
