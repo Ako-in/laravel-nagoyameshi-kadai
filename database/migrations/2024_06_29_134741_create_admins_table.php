@@ -12,11 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('admins', function (Blueprint $table) {
-            $table->id();
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            if (!Schema::hasColumn('admins', 'id')) {
+                $table->id();
+            }
+            if (!Schema::hasColumn('admins', 'email')) {
+                $table->string('email')->unique();
+            }
+            if (!Schema::hasColumn('admins', 'password')) {
+                $table->string('password');
+            }
+            if (!Schema::hasColumn('admins', 'rememberToken')) {
+                $table->rememberToken();
+            }
+            if (!Schema::hasColumn('admins', 'timestamps')) {
+                $table->timestamps();
+            }
+
         });
     }
 
@@ -25,6 +36,23 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admins');
+        Schema::table('users', function (Blueprint $table) {
+            if (Schema::hasColumn('admins', 'id')) {
+                $table->dropColumn('id');
+            }
+            if (Schema::hasColumn('admins', 'email')) {
+                $table->dropColumn('email');
+            }
+            if (Schema::hasColumn('admins', 'password')) {
+                $table->dropColumn('password');
+            }
+            if (Schema::hasColumn('admins', 'rememberToken')) {
+                $table->dropColumn('rememberToken');
+            }
+            if (Schema::hasColumn('admins', 'timestamps')) {
+                $table->dropColumn('timestamps');
+            }
+        });
+        // Schema::dropIfExists('admins');
     }
 };
