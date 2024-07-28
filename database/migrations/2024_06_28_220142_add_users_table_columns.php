@@ -12,12 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('kana');
-            $table->string('postal_code');
-            $table->string('address');
-            $table->string('phone_number');
-            $table->date('birthday')->nullable();
-            $table->string('occupation')->nullable();
+            if (!Schema::hasColumn('users', 'kana')) {
+                $table->string('kana');
+            }
+            if (!Schema::hasColumn('users', 'postal_code')) {
+                $table->string('postal_code');
+            }
+            if (!Schema::hasColumn('users', 'address')) {
+                $table->string('address');
+            }
+            if (!Schema::hasColumn('users', 'phone_number')) {
+                $table->string('phone_number');
+            }
+            if (!Schema::hasColumn('users', 'birthday')) {
+                $table->date('birthday')->nullable();
+            }
+            if (!Schema::hasColumn('users', 'occupation')) {
+                $table->string('occupation')->nullable();
+            }
         });
     }
 
@@ -27,12 +39,24 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('kana');
-            $table->dropColumn('postal_code');
-            $table->dropColumn('address');
-            $table->dropColumn('phone_number');
-            $table->dropColumn('birthday');
-            $table->dropColumn('occupation');
+            if (Schema::hasColumn('users', 'kana')) {
+                $table->dropColumn('kana');
+            }
+            if (Schema::hasColumn('users', 'postal_code')) {
+                $table->dropColumn('postal_code');
+            }
+            if (Schema::hasColumn('users', 'address')) {
+                $table->dropColumn('address');
+            }
+            if (Schema::hasColumn('users', 'phone_number')) {
+                $table->dropColumn('phone_number');
+            }
+            if (Schema::hasColumn('users', 'birthday')) {
+                $table->dropColumn('birthday');
+            }
+            if (Schema::hasColumn('users', 'occupation')) {
+                $table->dropColumn('occupation');
+            }
         });
     }
 };

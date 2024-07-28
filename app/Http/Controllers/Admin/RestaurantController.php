@@ -68,23 +68,18 @@ class RestaurantController extends Controller
         $restaurant->seating_capacity = $request->input('seating_capacity');
 
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
-        // if ($request->hasFile('image')) {
-        //     // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
-        //     // $image = $request->file('image')->store('public/restaurants');
-        //     $image = $request->file('image');
-        //     $image = Storage::disk('public')->put('public/restaurants',$image);
-        //     // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
-        //     $restaurant->image = basename($image);
-        // }else{
-        //     $restaurant = new Restaurant();
-        //     $restaurant->image = '';
-        // }
-
-        if($request->hasFile('image')){
-            $original = $request->file('image')->getClientOriginalName();
-            $name = date('Ymd_His').'_'.$original;
-            $file = $request->file('image')->move('storage/restaurants',$name);
-            $restaurant->image=$name;
+        if ($request->hasFile('image')) {
+            // // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
+            // $image = $request->file('image')->store('public/restaurants');
+            // // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
+            // $restaurant->image = basename($image);
+            $original = $request->file('image')->getClientOriginalName();//投稿ファイル名をそのまま保存
+            $name = date('Ymd_His').'_'.$original;//ファイル名の前に日時をつける
+            $file=$request->file('image')->move('storage/restaurants',$name);//storage/app/public/restaurantsに移動
+            $restaurant->file = $name;
+        }else{
+            $restaurant = new Restaurant();
+            $restaurant->image = '';
         }
         $restaurant->save();
 
@@ -143,7 +138,6 @@ class RestaurantController extends Controller
         // }else{
         //     $restaurant->image = '';
         // }
-        // dd($restaurant);
 
         if($request->hasFile('image')){
             $original = $request->file('image')->getClientOriginalName();
@@ -153,6 +147,7 @@ class RestaurantController extends Controller
         }
         $restaurant->save();
 
+        //     $restaurant->image = basename($image_path);
         //リダイレクトさせる
         return redirect()->route('admin.restaurants.edit', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');
     }

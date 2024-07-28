@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index(Request $request){
 
-        $users = User::query();
+        $users = User::query()->get();
         $keyword = $request->input('keyword');
         if(!empty($keyword)){
             $users->where('name','LIKE',"%{$keyword}%")
