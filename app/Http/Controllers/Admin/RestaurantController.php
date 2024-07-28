@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class RestaurantController extends Controller
@@ -66,14 +68,23 @@ class RestaurantController extends Controller
         $restaurant->seating_capacity = $request->input('seating_capacity');
 
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
-        if ($request->hasFile('image')) {
-            // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
-            $image = $request->file('image')->store('public/restaurants');
-            // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
-            $restaurant->image = basename($image);
-        }else{
-            $restaurant = new Restaurant();
-            $restaurant->image = '';
+        // if ($request->hasFile('image')) {
+        //     // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
+        //     // $image = $request->file('image')->store('public/restaurants');
+        //     $image = $request->file('image');
+        //     $image = Storage::disk('public')->put('public/restaurants',$image);
+        //     // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
+        //     $restaurant->image = basename($image);
+        // }else{
+        //     $restaurant = new Restaurant();
+        //     $restaurant->image = '';
+        // }
+
+        if($request->hasFile('image')){
+            $original = $request->file('image')->getClientOriginalName();
+            $name = date('Ymd_His').'_'.$original;
+            $file = $request->file('image')->move('storage/restaurants',$name);
+            $restaurant->image=$name;
         }
         $restaurant->save();
 
@@ -109,7 +120,6 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::where('id',$id)->first();
         $restaurant->name = $request->input('name');
         // $restaurant->image = empty($request->file('image')) ? '' : $request->file('image');
-
         $restaurant->description = $request->input('description');
         $restaurant->lowest_price = $request->input('lowest_price');
         $restaurant->highest_price = $request->input('highest_price');
@@ -120,31 +130,29 @@ class RestaurantController extends Controller
         $restaurant->seating_capacity = $request->input('seating_capacity');
         
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
-        if ($request->hasFile('image')) {
-            // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
-            $image = $request->file('image')->store('public/restaurants');
-            // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
-            $restaurant->image = basename($image);
-        }    
+        // if ($request->hasFile('image')) {
+        //     // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
+        //     // $image = $request->file('image')->store('public/restaurants');
+        //     //ファイルの読み込み
+        //     // $image = $request->file('image')->UploadFile::store('restaurants');
+        //     $image = $request->file('image');
+        //     $image = Storage::disk('public')->put('restaurants',$image);
+        //     // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
+        //     $restaurant->image = basename($restaurant);
+        // }    
         // }else{
         //     $restaurant->image = '';
         // }
+        // dd($restaurant);
+
+        if($request->hasFile('image')){
+            $original = $request->file('image')->getClientOriginalName();
+            $name = date('Ymd_His').'_'.$original;
+            $file = $request->file('image')->move('storage/restaurants',$name);
+            $restaurant->image=$name;
+        }
         $restaurant->save();
 
-        // // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
-        // if(empty($request->file('image'))){
-        //     $restaurant->image = '';
-        // }else{
-        //     $request->file('image')->store('public/restaurants');
-        //     $restaurant->image = basename($image_path);
-        // }
-        // // $image_path = $request->file('image')->store('public/restaurants');
-        // // ファイルパスからファイル名のみを取得し、Sampleインスタンスのimage_nameプロパティに代入する
-        // // $restaurant->image_name = basename($image_path);
-        // $test = $restaurant->save();
-        // session()->flash('message','店舗を編集しました。');
-        // Session::flash('message','店舗を編集しました。');
-        //    return redirect()->route('admin.restaurants.edit',['restaurant'=>$id]);
         //リダイレクトさせる
         return redirect()->route('admin.restaurants.edit', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');
     }
