@@ -4,17 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function index(Request $request)
     {
         $keyword = $request->input('keyword');
         If($keyword !== null){
-            $categories = Category::where('category','like',"%{$keyword}%")->paginate(15);
+            $categories = Category::where('name','like',"%{$keyword}%")->paginate(15);
         }else{
             $categories = Category::paginate(15);
         }
@@ -27,7 +30,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
@@ -35,7 +38,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //バリデーション設定
+        $request->validate([
+            'name' =>'required',
+        ]);
+        $category = new Category();
+        $category->name = $request->input('name');
+        $category->save();
+
+        //店舗登録後のリダイレクト先は店舗一覧ページ
+        return redirect()->route('admin.categories.index')->with('flash_message','カテゴリを登録しました。');
     }
 
     /**
@@ -59,14 +71,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $category = Category::where('id',$id)->first();
+        $category->name = $request->input('name');
+        $category->save();
+        //リダイレクトさせる
+        return redirect()->route('admin.categories.index', ['category' => $id])->with('flash_message', 'カテゴリを編集しました。');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return to_route('admin.categories.index')->with('flash_message','カテゴリを削除しました。');
     }
 }

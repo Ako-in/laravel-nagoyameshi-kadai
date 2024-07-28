@@ -147,7 +147,6 @@ class RestaurantController extends Controller
         }
         $restaurant->save();
 
-        //     $restaurant->image = basename($image_path);
         //リダイレクトさせる
         return redirect()->route('admin.restaurants.edit', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');
     }
