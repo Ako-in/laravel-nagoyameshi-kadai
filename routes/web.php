@@ -49,8 +49,11 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::delete('restaurants/{restaurant}',[Admin\RestaurantController::class,'destroy'])->name('restaurants.destroy');
     // Route::resource('restaurants',Admin\RestaurantController::class);
     Route::get('categories/index',[Admin\CategoryController::class,'index'])->name('categories.index');
-    Route::resource('categories',Admin\CategoryController::class);
+    Route::get('categories/',[Admin\CategoryController::class,'store'])->name('categories.store');
+    Route::put('categories/{category}',[Admin\CategoryController::class,'update'])->name('categories.update');
+    Route::get('categories/{category}/edit',[Admin\CategoryController::class,'edit'])->name('categories.edit');
     
+    Route::resource('categories',Admin\CategoryController::class);
     
 });
 

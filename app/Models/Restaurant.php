@@ -21,5 +21,8 @@ class Restaurant extends Model
         'closing_time',
         'seating_capacity'
     ];
+    public function categories(){
+        return $this->hasMany(Category::class)->withTimestamps();
+    }
 
 }
