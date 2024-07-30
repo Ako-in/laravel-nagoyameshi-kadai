@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
+use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+
 
 
 
@@ -66,22 +68,28 @@ class RestaurantController extends Controller
         $restaurant->opening_time = $request->input('opening_time');
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
+        
 
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
         if ($request->hasFile('image')) {
             // // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
             // $image = $request->file('image')->store('public/restaurants');
+            $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
+        
             // // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
             // $restaurant->image = basename($image);
-            $original = $request->file('image')->getClientOriginalName();//投稿ファイル名をそのまま保存
-            $name = date('Ymd_His').'_'.$original;//ファイル名の前に日時をつける
-            $file=$request->file('image')->move('storage/restaurants',$name);//storage/app/public/restaurantsに移動
-            $restaurant->file = $name;
+            // $original = $request->file('image')->getClientOriginalName();//投稿ファイル名をそのまま保存
+            // $name = date('Ymd_His').'_'.$original;//ファイル名の前に日時をつける
+            // $file=$request->file('image')->move('storage/restaurants',$name);//storage/app/public/restaurantsに移動
+            // $restaurant->file = $name;
         }else{
             $restaurant = new Restaurant();
             $restaurant->image = '';
         }
         $restaurant->save();
+
+        // $category_ids = array_filter($request->input('category_ids'));
+        // $restaurant->categories()->sync($category_ids);
 
         //店舗登録後のリダイレクト先は店舗一覧ページ
         return redirect()->route('admin.restaurants.index')->with('flash_message','店舗を登録しました。');
@@ -102,7 +110,10 @@ class RestaurantController extends Controller
      */
     public function edit(string $id)
     {   
-        $restaurants = Restaurant::where('id',$id)->first();
+        // $restaurants = Restaurant::where('id',$id)->first();
+        // // 設定されたカテゴリのIDを配列化する
+        // $category_ids = $restaurant->categories->pluck('id')->toArray();
+
         return view('admin.restaurants.edit',compact('restaurants','id'));
     }
 
@@ -140,12 +151,16 @@ class RestaurantController extends Controller
         // }
 
         if($request->hasFile('image')){
-            $original = $request->file('image')->getClientOriginalName();
-            $name = date('Ymd_His').'_'.$original;
-            $file = $request->file('image')->move('storage/restaurants',$name);
-            $restaurant->image=$name;
+            $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
+            // $original = $request->file('image')->getClientOriginalName();
+            // $name = date('Ymd_His').'_'.$original;
+            // $file = $request->file('image')->move('storage/restaurants',$name);
+            // $restaurant->image=$name;
         }
         $restaurant->save();
+
+        // $category_ids = array_filter($request->input('category_ids'));
+        // $restaurant->categories()->sync($category_ids);
 
         //リダイレクトさせる
         return redirect()->route('admin.restaurants.edit', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');

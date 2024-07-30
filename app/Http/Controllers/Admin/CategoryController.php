@@ -46,7 +46,7 @@ class CategoryController extends Controller
         $category->name = $request->input('name');
         $category->save();
 
-        //店舗登録後のリダイレクト先は店舗一覧ページ
+        //カテゴリ登録後のリダイレクト先はカテゴリ一覧ページ
         return redirect()->route('admin.categories.index')->with('flash_message','カテゴリを登録しました。');
     }
 
