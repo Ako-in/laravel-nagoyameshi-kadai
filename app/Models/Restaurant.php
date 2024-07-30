@@ -22,7 +22,7 @@ class Restaurant extends Model
         'seating_capacity'
     ];
     public function categories(){
-        return $this->hasMany(Category::class)->withTimestamps();
+        return $this->hasMany(Category::class);
     }
 
 }
