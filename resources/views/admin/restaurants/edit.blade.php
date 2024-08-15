@@ -32,7 +32,7 @@
 
                 <form method="POST" action="{{ route('admin.restaurants.update', $restaurant) }}" enctype="multipart/form-data">
                     @csrf
-                    @method('patch')
+                    @method('put')
                     <div class="form-group row mb-3">
                         <label for="name" class="col-md-5 col-form-label text-md-left fw-bold">店舗名</label>
 

@@ -9,9 +9,6 @@ use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-
-
-
 class RestaurantController extends Controller
 {
     /**
@@ -34,7 +31,8 @@ class RestaurantController extends Controller
      */
     public function create()
     {
-        return view('admin.restaurants.create');
+        $categories = Category::all();
+        return view('admin.restaurants.create',compact('categories'));
     }
 
     /**
@@ -75,7 +73,7 @@ class RestaurantController extends Controller
             // // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
             // $image = $request->file('image')->store('public/restaurants');
             $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
-        
+            $file = $request->file('image')->move('storage/restaurants');
             // // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
             // $restaurant->image = basename($image);
             // $original = $request->file('image')->getClientOriginalName();//投稿ファイル名をそのまま保存
@@ -83,13 +81,14 @@ class RestaurantController extends Controller
             // $file=$request->file('image')->move('storage/restaurants',$name);//storage/app/public/restaurantsに移動
             // $restaurant->file = $name;
         }else{
-            $restaurant = new Restaurant();
+            // $restaurant = new Restaurant();
             $restaurant->image = '';
         }
         $restaurant->save();
 
-        // $category_ids = array_filter($request->input('category_ids'));
-        // $restaurant->categories()->sync($category_ids);
+        $categories = $restaurant->category_id;
+        $category_ids = array_filter($request->input('category_ids'));
+        $restaurant->categories()->sync($category_ids);
 
         //店舗登録後のリダイレクト先は店舗一覧ページ
         return redirect()->route('admin.restaurants.index')->with('flash_message','店舗を登録しました。');
@@ -110,11 +109,22 @@ class RestaurantController extends Controller
      */
     public function edit(string $id)
     {   
+        $restaurant = Restaurant::where('id',$id)->first();
+        // レストランが見つからない場合のエラーハンドリング
+        if (!$restaurant) {
+            abort(404, 'Restaurant not found');
+        }
+        
+        $categories = Category::all();
+        // インスタンスに紐づくcategoriesテーブルのすべてのデータをインスタンスのコレクションとして取得する
+        // $categories = $restaurant->categories;
+        $category_array = $restaurant->categories->toArray();
         // $restaurants = Restaurant::where('id',$id)->first();
         // // 設定されたカテゴリのIDを配列化する
-        // $category_ids = $restaurant->categories->pluck('id')->toArray();
+        $category_ids = $restaurant->categories->pluck('id')->toArray();
 
-        return view('admin.restaurants.edit',compact('restaurants','id'));
+        // return view('admin.restaurants.edit',compact('restaurants','id'));
+        return view('admin.restaurants.edit',compact('restaurant','categories','category_ids'));
     }
 
     /**
@@ -122,7 +132,6 @@ class RestaurantController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // dd($request->input());
         $restaurant = Restaurant::where('id',$id)->first();
         $restaurant->name = $request->input('name');
         // $restaurant->image = empty($request->file('image')) ? '' : $request->file('image');
@@ -159,8 +168,8 @@ class RestaurantController extends Controller
         }
         $restaurant->save();
 
-        // $category_ids = array_filter($request->input('category_ids'));
-        // $restaurant->categories()->sync($category_ids);
+        $category_ids = array_filter($request->input('category_ids'));
+        $restaurant->categories()->sync($category_ids);
 
         //リダイレクトさせる
         return redirect()->route('admin.restaurants.edit', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');

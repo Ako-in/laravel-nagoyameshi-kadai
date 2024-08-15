@@ -47,7 +47,8 @@
 
                 <div class="mb-2">
                     @if ($restaurant->image !== '')
-                        <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" class="w-100">
+                        {{-- <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" class="w-100"> --}}
+                        <img src="data:image/png;base64,<?= $restaurant->image ?>" class="w-100">
                     @else
                         <img src="{{ asset('/images/no_image.jpg') }}" class="w-100">
                     @endif
