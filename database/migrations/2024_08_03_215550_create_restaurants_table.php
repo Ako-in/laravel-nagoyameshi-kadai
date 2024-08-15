@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('restaurant', function (Blueprint $table) {
+        Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image')->default('');
+            $table->longtext('image');
             $table->text('description');
             $table->integer('lowest_price')->unsigned();
             $table->integer('highest_price')->unsigned();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('restaurant');
+        Schema::dropIfExists('restaurants');
     }
 };

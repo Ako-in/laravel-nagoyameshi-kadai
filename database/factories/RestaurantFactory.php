@@ -21,6 +21,7 @@ class RestaurantFactory extends Factory
    {
        return [
             'name' => 'テスト',
+            'image'=>'テスト',
             'description' => 'テスト',
             'lowest_price' => 1000,
             'highest_price' => 5000,
@@ -29,6 +30,7 @@ class RestaurantFactory extends Factory
             'opening_time' => '10:00:00',
             'closing_time' => '20:00:00',
             'seating_capacity' => 50,
+            'image'=>'',
         ];
    }
 
