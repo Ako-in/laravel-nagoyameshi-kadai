@@ -161,6 +161,7 @@ class RestaurantController extends Controller
 
         if($request->hasFile('image')){
             $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
+            $file = $request->file('image')->move('storage/restaurants');
             // $original = $request->file('image')->getClientOriginalName();
             // $name = date('Ymd_His').'_'.$original;
             // $file = $request->file('image')->move('storage/restaurants',$name);
