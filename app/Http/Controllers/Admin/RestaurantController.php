@@ -167,11 +167,10 @@ class RestaurantController extends Controller
             // $file = $request->file('image')->move('storage/restaurants',$name);
             // $restaurant->image=$name;
         }
-        $restaurant->save();
-
+        
         $category_ids = array_filter($request->input('category_ids'));
         $restaurant->categories()->sync($category_ids);
-
+        $restaurant->save();
         //リダイレクトさせる
         return redirect()->route('admin.restaurants.edit', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');
     }
