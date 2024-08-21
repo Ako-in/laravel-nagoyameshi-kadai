@@ -88,8 +88,8 @@ class RestaurantController extends Controller
 
         $categories = $restaurant->category_id;
         $category_ids = array_filter($request->input('category_ids'));
-        $restaurant->categories()->sync($category_ids);
-
+        // $restaurant->categories()->sync($category_ids);
+        $restaurant->categories()->sync($request->input('category_ids'));
         //店舗登録後のリダイレクト先は店舗一覧ページ
         return redirect()->route('admin.restaurants.index')->with('flash_message','店舗を登録しました。');
     }
@@ -169,7 +169,8 @@ class RestaurantController extends Controller
         }
         
         $category_ids = array_filter($request->input('category_ids'));
-        $restaurant->categories()->sync($category_ids);
+        // $restaurant->categories()->sync($category_ids);
+        $restaurant->categories()->sync($request->input('category_ids'));
         $restaurant->save();
         //リダイレクトさせる
         return redirect()->route('admin.restaurants.edit', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');
