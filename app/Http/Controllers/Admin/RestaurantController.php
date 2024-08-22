@@ -148,7 +148,7 @@ class RestaurantController extends Controller
         $restaurant->categories()->sync($category_ids);
    
         //リダイレクトさせる
-        return redirect()->route('admin.restaurants.edit', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');
+        return redirect()->route('admin.restaurants.show', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');
     }
 
     /*
