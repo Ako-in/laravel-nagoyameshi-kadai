@@ -19,9 +19,9 @@ use App\Http\Controllers\Admin\CategoryController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
