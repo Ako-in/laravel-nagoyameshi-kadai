@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\Restaurant;
 
 class Category extends Model
 {
@@ -16,6 +15,6 @@ class Category extends Model
     // ];
     protected $guarded = ['id'];
     public function restaurants(){
-        return $this->belongsToMany(Restaurant::class)->withTimestamps();
+        return $this->belongsToMany(Restaurant::class,'category_restaurants');
     }
 }

@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\Category;
 use DateTimeInterface;
-
 
 class Restaurant extends Model
 {
@@ -34,8 +32,8 @@ class Restaurant extends Model
     public function categories(){
         // return $this->belongsToMany(Category::class)->withTimestamps();
         // belongsToMany('多対多の相手側のクラス名…ClassName::class',
-        // '中間テーブルの名前',　'中間テーブル外部キー名', '中間テーブル外部キー名')
-        return $this->belongsToMany(Category::class,'category_restaurants','restaurant_id','category_id');
+        // '中間テーブルの名前','中間テーブル外部キー名', '中間テーブル外部キー名')
+        return $this->belongsToMany(Category::class,'category_restaurants');
     }
 
 }

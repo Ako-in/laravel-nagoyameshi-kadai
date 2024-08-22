@@ -51,6 +51,7 @@ class RestaurantController extends Controller
            'opening_time' =>'required',
            'closing_time' =>'required|date_format:H:i|after:opening_time',
            'seating_capacity' =>'required|between:0,200|integer',
+           'category_ids' => 'required|array|max:3',  // カテゴリのバリデーション
            'image'=>'image|max:2048',
         ]);
 
@@ -67,29 +68,20 @@ class RestaurantController extends Controller
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
         
-
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
         if ($request->hasFile('image')) {
             // // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
             // $image = $request->file('image')->store('public/restaurants');
             $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
             $file = $request->file('image')->move('storage/restaurants');
-            // // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
-            // $restaurant->image = basename($image);
-            // $original = $request->file('image')->getClientOriginalName();//投稿ファイル名をそのまま保存
-            // $name = date('Ymd_His').'_'.$original;//ファイル名の前に日時をつける
-            // $file=$request->file('image')->move('storage/restaurants',$name);//storage/app/public/restaurantsに移動
-            // $restaurant->file = $name;
         }else{
-            // $restaurant = new Restaurant();
             $restaurant->image = '';
         }
         $restaurant->save();
 
-        $categories = $restaurant->category_id;
+        // $categories = $restaurant->category_id;
         $category_ids = array_filter($request->input('category_ids'));
-        // $restaurant->categories()->sync($category_ids);
-        $restaurant->categories()->sync($request->input('category_ids'));
+        $restaurant->categories()->sync($category_ids);
         //店舗登録後のリダイレクト先は店舗一覧ページ
         return redirect()->route('admin.restaurants.index')->with('flash_message','店舗を登録しました。');
     }
@@ -132,9 +124,12 @@ class RestaurantController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        //バリデーション設定
+        $request->validate([
+            'category_ids' => 'required|array|max:3',  // カテゴリのバリデーション
+        ]);
         $restaurant = Restaurant::where('id',$id)->first();
         $restaurant->name = $request->input('name');
-        // $restaurant->image = empty($request->file('image')) ? '' : $request->file('image');
         $restaurant->description = $request->input('description');
         $restaurant->lowest_price = $request->input('lowest_price');
         $restaurant->highest_price = $request->input('highest_price');
@@ -143,40 +138,20 @@ class RestaurantController extends Controller
         $restaurant->opening_time = $request->input('opening_time');
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
-        
-        // アップロードされたファイル（name="image"）が存在すれば処理を実行する
-        // if ($request->hasFile('image')) {
-        //     // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
-        //     // $image = $request->file('image')->store('public/restaurants');
-        //     //ファイルの読み込み
-        //     // $image = $request->file('image')->UploadFile::store('restaurants');
-        //     $image = $request->file('image');
-        //     $image = Storage::disk('public')->put('restaurants',$image);
-        //     // ファイルパスからファイル名のみを取得し、Productインスタンスのimage_nameプロパティに代入する
-        //     $restaurant->image = basename($restaurant);
-        // }    
-        // }else{
-        //     $restaurant->image = '';
-        // }
-
+       
         if($request->hasFile('image')){
             $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
             $file = $request->file('image')->move('storage/restaurants');
-            // $original = $request->file('image')->getClientOriginalName();
-            // $name = date('Ymd_His').'_'.$original;
-            // $file = $request->file('image')->move('storage/restaurants',$name);
-            // $restaurant->image=$name;
         }
-        
-        $category_ids = array_filter($request->input('category_ids'));
-        // $restaurant->categories()->sync($category_ids);
-        $restaurant->categories()->sync($request->input('category_ids'));
         $restaurant->save();
+        $category_ids = array_filter($request->input('category_ids'));
+        $restaurant->categories()->sync($category_ids);
+   
         //リダイレクトさせる
         return redirect()->route('admin.restaurants.edit', ['restaurant' => $id])->with('flash_message', '店舗を編集しました。');
     }
 
-    /**
+    /*
      * Remove the specified resource from storage.
      */
     public function destroy(Restaurant $restaurant)
