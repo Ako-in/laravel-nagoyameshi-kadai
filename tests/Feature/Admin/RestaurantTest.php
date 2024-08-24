@@ -173,6 +173,10 @@ class RestaurantTest extends TestCase
         
             array_push($categoryIds, $category->id);    
         }
+        //定休日のダミーデータ作成
+        $regularHolidayIds = [];
+        $regularHoliday = RegularHodilay::factory()->create();
+        array_push($regularHolidayIds, $restaurant->id);
         // タイムゾーンを指定してCarbonインスタンスを生成
         $now = Carbon::now()->setTimezone('Asia/Tokyo');
         $restaurant = Restaurant::create([
@@ -190,30 +194,31 @@ class RestaurantTest extends TestCase
             "created_at" => $now,
         ]);
 
-        // $categoryRestaurants = [];
         foreach ($categoryIds as $categoryId ) {
-            // $categoryRestaurant =CategoryRestaurant::create([
-            //     "restaurant_id" => $restaurant['id'],
-            //     "category_id" => $categoryId,
-            //     "updated_at" => $now,
-            //     "created_at" => $now,
-            // ]);
             CategoryRestaurant::create([
                 "restaurant_id" => $restaurant['id'],
                 "category_id" => $categoryId,
                 "updated_at" => $now,
                 "created_at" => $now,
             ]);
-        
-            // array_push($categoryRestaurants, $categoryRestaurant->id);    
         }
-    
+        foreach($regularHolidayIds as $regularHolidayId){
+            RegularHoliday::create([
+                "restaurant_id"=>$restaurant['id'],
+                "regular_holiday_id"=>$regularHolidayId,
+                "created_at"=>$now,
+                "updated_at"=>$now,
+            ]);
+        }
         $restaurantArray = $restaurant->toArray();
         $restaurantArray['updated_at'] = $now->toDateTimeString();
         $restaurantArray['created_at'] = $now->toDateTimeString();
         
+        $regularHolidayArray = $regularHodliday->toArray();
+        $regularHolidayArray['created_at'] = $now->toDateTimeString();
+        $regularHolidayArray['updated_at'] = $now->toDateTimeString();
         // レストランを登録する際にtoArrayを使用
-        $response = $this->post(route('admin.restaurants.store'), $restaurantArray);
+        $response = $this->post(route('admin.restaurants.store'), $restaurantArray, $regularHolidayArray );
         // 正しいHTTPステータスコードが返されることを検証
         $response->assertStatus(302); // リダイレクト用のHTTPレスポンスコード
         $response->assertRedirect(route('admin.login')); // リダイレクト先の検証
@@ -223,35 +228,23 @@ class RestaurantTest extends TestCase
         // $response->assertStatus(200); // または適切なステータスコード
 
         // タイムスタンプなしでの検証
-        // $expectedData = $restaurantArray;
         unset($restaurantArray['category_ids']);
         unset($restaurantArray['created_at']);
         unset($restaurantArray['updated_at']);
-        // $this->assertDatabaseHas('restaurants', $expectedData);
-        $this->assertDatabaseHas('restaurants', $restaurantArray);
+
+        unset($regularHolidayArray['regularHoliday_ids']);
+        unset($regularHolidayArray['updated_at']);
+        unset($regularHolidayArray['updated_at']);
+        
+        $this->assertDatabaseHas('restaurants', $restaurantArray, $regularHolidayArray);
 
         foreach ($categoryIds as $categoryId) {
             $this->assertDatabaseHas('category_restaurants', ['category_id' => $categoryId]);
         }
-        // $response = $this->actingAs($admin, 'admin')->get(route('admin.restaurants.store', $restaurant));
-    
-        // タイムスタンプでの検証
-        // $this->assertDatabaseHas('restaurants', [
-        //     'name' => $restaurant->name,
-        //     'description' => $restaurant->description,
-        //     'lowest_price' => $restaurant->lowest_price,
-        //     'highest_price' => $restaurant->highest_price,
-        //     'postal_code' => $restaurant->postal_code,
-        //     'address' => $restaurant->address,
-        //     'opening_time' => $restaurant->opening_time,
-        //     'closing_time' => $restaurant->closing_time,
-        //     'seating_capacity' => $restaurant->seating_capacity,
-        //     'created_at' => $now->toDateTimeString(),
-        //     'updated_at' => $now->toDateTimeString(),
-        // ]);
-        // // $this->assertDatabaseMissing('restaurants',$restaurant, 'category_restaurant',$categoryId);
+        foreach($regularHolidayIds as $regularHolidayId){
+            $this->assertDatabaseHas('regular_holiday_resutaurant',['regular_holiday_id'=> $regularHolidayId]);
+        }
 
-        // $response->assertRedirect(route('admin.login'));
     }
 
     public function test_login_user_cannot_access_to_restaurants_store(): void

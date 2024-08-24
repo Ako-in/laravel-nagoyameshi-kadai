@@ -74,8 +74,11 @@ class CategoryController extends Controller
         $category = Category::where('id',$id)->first();
         $category->name = $request->input('name');
         $category->save();
+        // $regular_holiday_ids = RegularHoliday::where('id',$id)->first();
+        // $restaurant->regular_holiday_ids = $request->input('day');
+        // $regular_holiday_restaurant->save();
         //リダイレクトさせる
-        return redirect()->route('admin.categories.index', ['category' => $id])->with('flash_message', 'カテゴリを編集しました。');
+        return redirect()->route('admin.categories.index', ['category' => $id,'regular_holiday'=> $id])->with('flash_message', 'カテゴリを編集しました。');
     }
 
     /**
