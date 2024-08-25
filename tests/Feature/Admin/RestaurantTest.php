@@ -13,6 +13,7 @@ use App\Models\Restaurant;
 use App\Models\CategoryRestaurant;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\RegularHoliday;
 use Carbon\Carbon;
 use DateTimeInterface;
 
