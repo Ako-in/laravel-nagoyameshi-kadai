@@ -9,7 +9,7 @@
 
                 <div class="d-flex justify-content-end align-items-end mb-3">
                     <div>
-                        <a href="{{ route('admin.terms.edit', $term) }}" class="me-2">編集</a>
+                        <a href="{{ route('admin.terms.edit', $terms) }}" class="me-2">編集</a>
                     </div>
                 </div>
 
@@ -22,7 +22,7 @@
 
 
                 <div class="container mb-4 nagoyameshi-terms">
-                    {!! $term->content !!}
+                    {!! $terms->content !!}
                 </div>
             </div>
         </div>

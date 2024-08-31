@@ -27,7 +27,7 @@
 
                 <form method="POST" action="{{ route('admin.company.update', $company) }}">
                     @csrf
-                    @method('patch')
+                    @method('PUT')
                     <div class="form-group row mb-3">
                         <label for="name" class="col-md-5 col-form-label text-md-left fw-bold">会社名</label>
 

@@ -5,7 +5,8 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
-
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\TermController;
 
 
 /*
@@ -54,6 +55,22 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::get('categories/{category}/edit',[Admin\CategoryController::class,'edit'])->name('categories.edit');
     
     Route::resource('categories',Admin\CategoryController::class);
-    
+
+    // Route::resource('company', Admin\CompanyController::class)->only(['index', 'edit', 'update']);
+    Route::get('admin/company/index', [CompanyController::class, 'index'])->name('company.index');
+    Route::put('admin/company/{company}', [CompanyController::class, 'update'])->name('company.update');
+    Route::get('admin/company/{company}/edit', [CompanyController::class, 'edit'])->name('company.edit');
+   
+
+
+
+    // Route::get('company/index',[Admin\CompanyController::class,'index'])->name('company.index');
+    // Route::put('company/{company}/edit',[Admin\CompanyController::class,'edit'])->name('company.edit');
+    // Route::put('company/{company}',[Admin\CompanyController::class,'index'])->name('company.update');
+    // Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
+
+
+    Route::resource('terms', Admin\TermController::class)->only(['index', 'edit', 'update']);
+    // Route::get('terms/index',[Admin\TermController::class,'index'])->name('terms.index');
 });
 

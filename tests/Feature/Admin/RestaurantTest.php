@@ -755,7 +755,9 @@ class RestaurantTest extends TestCase
             "closing_time" => "20:00:00",
             "seating_capacity" => 50,
             "image" => "",
+            
         ]);
+        
         // $restaurant = Restaurant::factory()->create();
         $this->actingAs($admin, 'admin');
         $response = $this->delete(route('admin.restaurants.destroy', $restaurant->id), ['_token' => csrf_token()]);

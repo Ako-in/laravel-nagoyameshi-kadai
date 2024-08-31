@@ -9,7 +9,7 @@
                 
                 <div class="d-flex justify-content-end align-items-end mb-3">                    
                     <div>
-                        <a href="{{ route('admin.company.edit', $company) }}" class="me-2">編集</a>                        
+                        <a href="{{ route('admin.company.edit',['company' => $company->id])}}" class="me-2">編集</a>                        
                     </div>
                 </div>                 
                 
