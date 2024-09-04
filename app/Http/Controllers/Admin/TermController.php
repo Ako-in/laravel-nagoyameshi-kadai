@@ -5,21 +5,24 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Term;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TermController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $terms= Term::get()->last();
+        $terms= Term::latest()->first();
         return view('admin.terms.index',compact('terms'));
     }
 
-    public function edit(Term $term)
+    public function edit(Term $term, $id)
     {
-        return view('admin.terms.edit',compact('term'));
+        $terms = Term::get()->last();
+        return view('admin.terms.edit',compact('terms'));
     }
 
     public function update(Request $request, string $id)

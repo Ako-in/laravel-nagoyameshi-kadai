@@ -57,10 +57,10 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::resource('categories',Admin\CategoryController::class);
 
     // Route::resource('company', Admin\CompanyController::class)->only(['index', 'edit', 'update']);
-    Route::get('admin/company/index', [CompanyController::class, 'index'])->name('company.index');
-    Route::put('admin/company/{company}', [CompanyController::class, 'update'])->name('company.update');
-    Route::get('admin/company/{company}/edit', [CompanyController::class, 'edit'])->name('company.edit');
-   
+    Route::get('company/index', [Admin\CompanyController::class, 'index'])->name('company.index');
+    Route::patch('company/{company}', [Admin\CompanyController::class, 'update'])->name('company.update');
+    Route::get('company/{company}/edit', [Admin\CompanyController::class, 'edit'])->name('company.edit');
+    // Route::get('company/edit/{company}', [Admin\CompanyController::class, 'edit'])->name('company.edit');
 
 
 
@@ -70,7 +70,9 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     // Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
 
 
-    Route::resource('terms', Admin\TermController::class)->only(['index', 'edit', 'update']);
-    // Route::get('terms/index',[Admin\TermController::class,'index'])->name('terms.index');
+    // Route::resource('terms', Admin\TermController::class)->only(['index', 'edit', 'update']);
+    Route::get('terms/index',[Admin\TermController::class,'index'])->name('terms.index');
+    Route::get('terms/{term}/edit',[Admin\TermController::class,'edit'])->name('terms.edit');
+    Route::put('terms/{term}',[Admin\TermController::class,'update'])->name('terms.update');
 });
 
