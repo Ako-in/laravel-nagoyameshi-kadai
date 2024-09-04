@@ -13,6 +13,8 @@ class CategoryRestaurant extends Model
 
         'restaurant_id',
         'category_id',
+        'created_at',
+        'updated_at',
         // 'name',
         // 'description',
         // 'lowest_price',
