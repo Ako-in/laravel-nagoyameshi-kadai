@@ -23,6 +23,8 @@ class Restaurant extends Model
         'closing_time',
         'seating_capacity',
         'image',
+        'day',
+        'day_index',
     ];
 
     protected $casts = [
@@ -34,6 +36,10 @@ class Restaurant extends Model
         // belongsToMany('多対多の相手側のクラス名…ClassName::class',
         // '中間テーブルの名前','中間テーブル外部キー名', '中間テーブル外部キー名')
         return $this->belongsToMany(Category::class,'category_restaurants');
+    }
+
+    public function regular_holidays(){
+        return $this->belongsToMany(RegularHoliday::class);
     }
 
 }

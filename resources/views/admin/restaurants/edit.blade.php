@@ -32,7 +32,7 @@
 
                 <form method="POST" action="{{ route('admin.restaurants.update', $restaurant) }}" enctype="multipart/form-data">
                     @csrf
-                    @method('put')
+                    @method('PUT')
                     <div class="form-group row mb-3">
                         <label for="name" class="col-md-5 col-form-label text-md-left fw-bold">店舗名</label>
 
@@ -51,10 +51,7 @@
 
                     <!-- 選択された画像の表示場所 -->
                     @if ($restaurant->image !== '')
-                        <div class="row" id="imagePreview">
-                            <img src="data:image/png;base64,<?= $restaurant->image ?>" class="w-100">
-                                {{-- <img src="{{ asset('storage/restaurants/'. $restaurant->image) }}" class="mb-3"> --}}
-                            </div>
+                        <div class="row" id="imagePreview"><img src="{{ asset('storage/restaurants/'. $restaurant->image) }}" class="mb-3"></div>
                     @else
                         <div class="row" id="imagePreview"></div>
                     @endif
@@ -152,6 +149,23 @@
                                     @endif
                                 @endfor
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-3">
+                        <label class="col-md-5 col-form-label text-md-left fw-bold">定休日</label>
+
+                        <div class="col-md-7 d-flex flex-wrap">
+                            @foreach ($regular_holidays as $index => $regular_holiday)
+                                <div class="form-check d-flex align-items-center me-3">
+                                    @if ($restaurant->regular_holidays()->where('regular_holiday_id', $regular_holiday->id)->exists())
+                                        <input type="checkbox" class="form-check-input" id="regularHoliday{{ $index }}" name="regular_holiday_ids[]" value="{{ $regular_holiday->id }}" checked>
+                                    @else
+                                        <input type="checkbox" class="form-check-input" id="regularHoliday{{ $index }}" name="regular_holiday_ids[]" value="{{ $regular_holiday->id }}">
+                                    @endif
+                                    <label class="form-check-label" for="regularHoliday{{ $index }}"><span class="badge bg-secondary ms-1">{{ $regular_holiday->day }}</span></label>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 
