@@ -23,12 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-<<<<<<<< HEAD:database/migrations/2024_08_22_200605_create_regular_holidays_table.php
-        Schema::dropIfExists('regular_holidays');
-========
-
         Schema::dropIfExists('terms');
->>>>>>>> feature-admin-basic-information:database/migrations/2024_08_26_010723_create_terms_table.php
 
     }
 };

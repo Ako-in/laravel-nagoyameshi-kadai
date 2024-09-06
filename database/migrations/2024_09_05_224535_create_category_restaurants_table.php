@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-        Schema::create('regular_holidays', function (Blueprint $table) {
+        Schema::create('category_restaurants', function (Blueprint $table) {
             $table->id();
-            $table->string('day')->nullable();
-            $table->integer('day_index')->nullable();
+            $table->foreignId('restaurant_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('regular_holidays');
+        Schema::dropIfExists('category_restaurants');
     }
 };

@@ -152,7 +152,6 @@ class RestaurantTest extends TestCase
     // // ログイン済みの一般ユーザーは店舗を登録できない
     // // ログイン済みの管理者は店舗を登録できる
 
-    
     public function test_not_login_adminuser_cannot_access_to_restaurants_store(): void
         // 未ログインadminのユーザーは管理者側の店舗登録できない
     {
@@ -176,7 +175,8 @@ class RestaurantTest extends TestCase
         }
         //定休日のダミーデータ作成
         $regularHolidayIds = [];
-        $regularHoliday = RegularHodilay::factory()->create();
+        $regularHoliday = RegularHoliday::factory()->create();
+        $restaurant = Restaurant::factory()->create();
         array_push($regularHolidayIds, $restaurant->id);
         // タイムゾーンを指定してCarbonインスタンスを生成
         $now = Carbon::now()->setTimezone('Asia/Tokyo');
@@ -199,23 +199,24 @@ class RestaurantTest extends TestCase
             CategoryRestaurant::create([
                 "restaurant_id" => $restaurant['id'],
                 "category_id" => $categoryId,
-                "updated_at" => $now,
-                "created_at" => $now,
+                "updated_at" => now(),
+                "created_at" => now(),
             ]);
         }
         foreach($regularHolidayIds as $regularHolidayId){
             RegularHoliday::create([
                 "restaurant_id"=>$restaurant['id'],
                 "regular_holiday_id"=>$regularHolidayId,
-                "created_at"=>$now,
-                "updated_at"=>$now,
+                "created_at"=>now(),
+                "updated_at"=>now(),
             ]);
         }
+        
         $restaurantArray = $restaurant->toArray();
         $restaurantArray['updated_at'] = $now->toDateTimeString();
         $restaurantArray['created_at'] = $now->toDateTimeString();
         
-        $regularHolidayArray = $regularHodliday->toArray();
+        $regularHolidayArray = $regularHoliday->toArray();
         $regularHolidayArray['created_at'] = $now->toDateTimeString();
         $regularHolidayArray['updated_at'] = $now->toDateTimeString();
         // レストランを登録する際にtoArrayを使用
@@ -236,6 +237,11 @@ class RestaurantTest extends TestCase
         unset($regularHolidayArray['regularHoliday_ids']);
         unset($regularHolidayArray['updated_at']);
         unset($regularHolidayArray['updated_at']);
+
+
+        // dd($restaurantArray);
+
+        // dd($regularHolidayArray);
         
         $this->assertDatabaseHas('restaurants', $restaurantArray, $regularHolidayArray);
 
@@ -243,9 +249,8 @@ class RestaurantTest extends TestCase
             $this->assertDatabaseHas('category_restaurants', ['category_id' => $categoryId]);
         }
         foreach($regularHolidayIds as $regularHolidayId){
-            $this->assertDatabaseHas('regular_holiday_resutaurant',['regular_holiday_id'=> $regularHolidayId]);
+            $this->assertDatabaseHas('regular_holiday_restaurant',['regular_holiday_id'=> $regularHolidayId]);
         }
-
     }
 
     public function test_login_user_cannot_access_to_restaurants_store(): void
