@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\TermController;
-
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +20,9 @@ use App\Http\Controllers\Admin\TermController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('home');
+// });
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -75,4 +75,11 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::get('terms/{term}/edit',[Admin\TermController::class,'edit'])->name('terms.edit');
     Route::put('terms/{term}',[Admin\TermController::class,'update'])->name('terms.update');
 });
+
+Route::group(['middleware' => 'guest:admin'], function () {
+    Route::get('/',[HomeController::class,'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
+});
+
+
 
