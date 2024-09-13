@@ -2,12 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
-use App\Http\Controllers\Admin\UserController;
+// use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+
+// use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +44,13 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::get('users/index',[Admin\UserController::class,'index'])->name('users.index');
     // Route::post('users/{id}',[Admin\UserController::class,'show'])->whereNumber('id')->name('users.show');
     Route::get('users/{id}',[Admin\UserController::class,'show'])->name('users.show');
+    
+    // Route::get('user',[UserController::class,'index'])->name('user.index');
+    // Route::get('user/{user}/edit',[UserController::class,'edit'])->name('user.edit');
+    // Route::put('user/{user}',[UserController::class,'update'])->name('user.update');
+
+
+
     Route::get('restaurants/index',[Admin\RestaurantController::class,'index'])->name('restaurants.index');
     Route::get('restaurants/create',[Admin\RestaurantController::class,'create'])->name('restaurants.create');
     Route::post('restaurants',[Admin\RestaurantController::class,'store'])->name('restaurants.store');
@@ -60,26 +70,40 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::get('company/index', [Admin\CompanyController::class, 'index'])->name('company.index');
     Route::patch('company/{company}', [Admin\CompanyController::class, 'update'])->name('company.update');
     Route::get('company/{company}/edit', [Admin\CompanyController::class, 'edit'])->name('company.edit');
-    // Route::get('company/edit/{company}', [Admin\CompanyController::class, 'edit'])->name('company.edit');
 
-
-
-    // Route::get('company/index',[Admin\CompanyController::class,'index'])->name('company.index');
-    // Route::put('company/{company}/edit',[Admin\CompanyController::class,'edit'])->name('company.edit');
-    // Route::put('company/{company}',[Admin\CompanyController::class,'index'])->name('company.update');
-    // Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
-
-
-    // Route::resource('terms', Admin\TermController::class)->only(['index', 'edit', 'update']);
     Route::get('terms/index',[Admin\TermController::class,'index'])->name('terms.index');
     Route::get('terms/{term}/edit',[Admin\TermController::class,'edit'])->name('terms.edit');
     Route::put('terms/{term}',[Admin\TermController::class,'update'])->name('terms.update');
 });
 
 Route::group(['middleware' => 'guest:admin'], function () {
-    Route::get('/',[HomeController::class,'index'])->name('home');
+    // Route::get('/',[HomeController::class,'index'])->name('home');
     Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
+    // Route::get('user/index',[UserController::class,'index'])->name('user.index');
+    // Route::get('user/{user}/edit',[UserController::class,'edit'])->name('user.edit');
+    // Route::put('user/{user}',[UserController::class,'update'])->name('user.update');
 });
 
 
+// Route::middleware('auth')->group(function () {
+//     Route::get('user/index', [UserController::class, 'index'])->name('user.index');
+//     Route::get('user/{user}/edit',[UserController::class,'edit'])->name('user.edit');
+//     Route::put('user/{user}',[UserController::class,'update'])->name('user.update');
+// });
+
+// 必要に応じて名前空間を指定する
+// Route::namespace('App\Http\Controllers')->group(function () {
+    
+//     // Route::resource('user', 'UserController')->middleware(['auth', 'verified']);
+//     Route::get('user/index', [UserController::class,'index'])->middleware(['auth', 'verified'])->name('user.index');
+//     Route::get('user/{user}/edit', [UserController::class,'edit'])->middleware(['auth', 'verified'])->name('user.edit');
+//     Route::put('user/{user}', [UserController::class,'update'])->middleware(['auth', 'verified'])->name('user.update');
+// });
+
+// 通常ユーザー向けルート
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('user/index', [UserController::class,'index'])->name('user.index');
+    Route::get('user/{user}/edit', [UserController::class,'edit'])->name('user.edit');
+    Route::put('user/{user}', [UserController::class,'update'])->name('user.update');
+});
 
