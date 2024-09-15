@@ -80,4 +80,8 @@ class RestaurantController extends Controller
         }
         return view('restaurants.index',compact('restaurants','keyword','total','category_id','price','sorts','sorted','sort_query','categories'));
     }
+
+    public function show(){
+        
+    }
 }

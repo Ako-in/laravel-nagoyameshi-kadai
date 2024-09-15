@@ -45,8 +45,7 @@ class RestaurantTest extends TestCase
         // 管理者が店舗一覧ページにアクセスしようとする
         $response = $this->get(route('restaurants.index'));
 
-        // 管理者はアクセスできない（403 Forbidden）
-        $response->assertStatus(403);
+        $response->assertRedirect(route('admin.home'));
 
     }
 }
