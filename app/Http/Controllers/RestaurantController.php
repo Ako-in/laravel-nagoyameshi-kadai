@@ -16,6 +16,7 @@ class RestaurantController extends Controller
      */
     public function index(Request $request)
     {
+
         // if (Auth::guard('admin')->check()) {
         //     abort(403, 'This action is unauthorized.');
         // }
@@ -30,6 +31,7 @@ class RestaurantController extends Controller
         // 管理者なら別の処理を行う
         return redirect('/admin/home');
     }
+
 
         $keyword = $request->input('keyword');
         $category_id = $request->input('category_id');
@@ -95,7 +97,4 @@ class RestaurantController extends Controller
         return view('restaurants.index',compact('restaurants','keyword','total','category_id','price','sorts','sorted','sort_query','categories'));
     }
 
-    // public function show(){
-
-    // }
 }
