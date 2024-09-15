@@ -41,12 +41,14 @@ class RestaurantController extends Controller
             $restaurants = Restaurant::whereHas('categories',function($query)use($keyword){
                 $query->where('categories.name','like',"%{$keyword}%");
             })
-            ->orWhereHas('restaurants',function($query)use($keyword){
-                $query->where('restaurants.address','like',"%{$keyword}%");
-            })
-            ->orWhereHas('restaurants',function($query)use($keyword){
-                $query->where('restaurants.name','like',"%{$keyword}%");
-            })
+            ->orWhere('address', 'like', "%{$keyword}%")
+            ->orWhere('name', 'like', "%{$keyword}%")
+            // ->orWhereHas('restaurants',function($query)use($keyword){
+            //     $query->where('restaurants.address','like',"%{$keyword}%");
+            // })
+            // ->orWhereHas('restaurants',function($query)use($keyword){
+            //     $query->where('restaurants.name','like',"%{$keyword}%");
+            // })
             ->sortable($sort_query)
             ->orderBy('created_at','desc')
             ->paginate(15);
