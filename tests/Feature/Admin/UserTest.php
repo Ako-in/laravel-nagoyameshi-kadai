@@ -20,7 +20,7 @@ class UserTest extends TestCase
     // ログイン済みの一般ユーザーは管理者側の会員一覧ページにアクセスできない
     // ログイン済みの管理者は管理者側の会員一覧ページにアクセスできる
 
-    public function test_not_login_adminuser_cannot_access(): void
+        public function test_not_login_adminuser_cannot_access(): void
         // OK!!!未ログインadminのユーザーは管理者側の会員一覧ページにアクセスできない
         {
             $response = $this->get('login');//未ログインの状態で'login'にアクセス

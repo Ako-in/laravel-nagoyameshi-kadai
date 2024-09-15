@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use DateTimeInterface;
+use Kyslik\ColumnSortable\Sortable;
 
 class Restaurant extends Model
 {
     use SerializeDate;
-    use HasFactory;
+    use HasFactory, Sortable;
     protected $table = 'restaurants';
     protected $fillable = [
         'name',

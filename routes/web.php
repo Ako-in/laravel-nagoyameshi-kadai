@@ -3,14 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
 // use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\RestaurantController;
+// use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
-
-// use App\Http\Controllers\UserController;
+use App\Http\Controllers\RestaurantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +21,6 @@ use App\Http\Controllers\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('home');
-// });
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -48,8 +43,6 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     // Route::get('user',[UserController::class,'index'])->name('user.index');
     // Route::get('user/{user}/edit',[UserController::class,'edit'])->name('user.edit');
     // Route::put('user/{user}',[UserController::class,'update'])->name('user.update');
-
-
 
     Route::get('restaurants/index',[Admin\RestaurantController::class,'index'])->name('restaurants.index');
     Route::get('restaurants/create',[Admin\RestaurantController::class,'create'])->name('restaurants.create');
@@ -84,26 +77,16 @@ Route::group(['middleware' => 'guest:admin'], function () {
     // Route::put('user/{user}',[UserController::class,'update'])->name('user.update');
 });
 
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('user/index', [UserController::class, 'index'])->name('user.index');
-//     Route::get('user/{user}/edit',[UserController::class,'edit'])->name('user.edit');
-//     Route::put('user/{user}',[UserController::class,'update'])->name('user.update');
-// });
-
-// 必要に応じて名前空間を指定する
-// Route::namespace('App\Http\Controllers')->group(function () {
-    
-//     // Route::resource('user', 'UserController')->middleware(['auth', 'verified']);
-//     Route::get('user/index', [UserController::class,'index'])->middleware(['auth', 'verified'])->name('user.index');
-//     Route::get('user/{user}/edit', [UserController::class,'edit'])->middleware(['auth', 'verified'])->name('user.edit');
-//     Route::put('user/{user}', [UserController::class,'update'])->middleware(['auth', 'verified'])->name('user.update');
-// });
-
 // 通常ユーザー向けルート
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('user/index', [UserController::class,'index'])->name('user.index');
     Route::get('user/{user}/edit', [UserController::class,'edit'])->name('user.edit');
     Route::put('user/{user}', [UserController::class,'update'])->name('user.update');
 });
+
+// Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index')->middleware('can:viewAny,App\Models\Restaurant');
+Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
+// ->middleware('can:viewAny,App\Models\Restaurant')
+// ->name('restaurants.index');
+
 
