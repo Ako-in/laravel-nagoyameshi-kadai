@@ -46,7 +46,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
 
     Route::get('restaurants/index',[Admin\RestaurantController::class,'index'])->name('restaurants.index');
     Route::get('restaurants/create',[Admin\RestaurantController::class,'create'])->name('restaurants.create');
-    Route::post('restaurants',[Admin\RestaurantController::class,'store'])->name('restaurants.store');
+    Route::post('restaurants/',[Admin\RestaurantController::class,'store'])->name('restaurants.store');
     Route::get('restaurants/{restaurant}',[Admin\RestaurantController::class,'show'])->name('restaurants.show');
     Route::get('restaurants/{restaurant}/edit',[Admin\RestaurantController::class,'edit'])->name('restaurants.edit');
     Route::put('restaurants/{restaurant}',[Admin\RestaurantController::class,'update'])->name('restaurants.update');
