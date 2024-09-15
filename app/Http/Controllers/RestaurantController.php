@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
+use App\Models\User;
 use App\Models\Category;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 
 class RestaurantController extends Controller
@@ -14,9 +16,21 @@ class RestaurantController extends Controller
      */
     public function index(Request $request)
     {
-        if (Auth::guard('admin')->check()) {
-            abort(403, 'This action is unauthorized.');
-        }
+        // if (Auth::guard('admin')->check()) {
+        //     abort(403, 'This action is unauthorized.');
+        // }
+        // $user = $request->user(); // 1人のユーザーを取得
+        // $admin = $request->admin();
+        // if ($user !==$admin()) {
+        //     return redirect()->route('admin.home');
+        // }
+
+        $user = $request->user(); // 現在のユーザーを取得
+    if ($user && $user->is_admin) {
+        // 管理者なら別の処理を行う
+        return redirect('/admin/home');
+    }
+
         $keyword = $request->input('keyword');
         $category_id = $request->input('category_id');
         $price = $request->input('price');
@@ -82,6 +96,6 @@ class RestaurantController extends Controller
     }
 
     public function show(){
-        
+
     }
 }

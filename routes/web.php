@@ -85,8 +85,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 });
 
 // Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index')->middleware('can:viewAny,App\Models\Restaurant');
-Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
+// Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
 // ->middleware('can:viewAny,App\Models\Restaurant')
 // ->name('restaurants.index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('restaurants/index', [RestaurantController::class, 'index'])->name('restaurants.index');
+});
 
 

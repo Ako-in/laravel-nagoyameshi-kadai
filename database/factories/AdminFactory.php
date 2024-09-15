@@ -14,12 +14,13 @@ class AdminFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $faker->name,
-            'email' => $faker->unique()->safeEmail,
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
             'password' => bcrypt('password'), // パスワードのデフォルト値
+            'is_admin' => 1, // 管理者として作成
             'created_at' => now(),
             'updated_at' => now(),
-            'remember_token' => Str::random(10),
+            // 'remember_token' => Str::random(10),
         ];
     /**
      * Define the model's default state.
