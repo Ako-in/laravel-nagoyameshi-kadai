@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('regular_holidays', function (Blueprint $table) {
             $table->id();
-            $table->string('day');
+            $table->string('day')->default('Monday');;
             $table->integer('day_index')->nullable();
             $table->timestamps();
         });
