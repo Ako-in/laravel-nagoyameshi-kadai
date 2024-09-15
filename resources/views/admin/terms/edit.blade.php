@@ -25,11 +25,11 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('admin.terms.update', $term) }}">
+                <form method="POST" action="{{ route('admin.terms.update', $terms) }}">
                     @csrf
-                    @method('patch')
+                    @method('PUT')
                     <div class="form-group mb-3">
-                        <textarea class="form-control" name="content" cols="30" rows="24">{{ old('content', $term->content) }}</textarea>
+                        <textarea class="form-control" name="content" cols="30" rows="24">{{ old('content', $terms->content) }}</textarea>
                     </div>
 
                     <hr class="my-4">

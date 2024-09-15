@@ -128,7 +128,7 @@ class RestaurantTest extends TestCase
 
     // storeアクション（店舗登録機能）
 
-    public function test_not_login_user_cannot_access_to_restaurants_store(): void
+    public function test_not_login_adminuser_cannot_access_to_restaurants_store(): void
         // 未ログインadminのユーザーは管理者側の店舗登録できない
         {
             $user = User::factory()->create(); // 一般ユーザーを作成
@@ -151,7 +151,7 @@ class RestaurantTest extends TestCase
             $response->assertRedirect(route('admin.login'));
     
         }
-   
+
     public function test_login_user_cannot_access_to_restaurants_store(): void
     //ログイン済みの一般ユーザーは管理者側の店舗登録できない
     {

@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User; // 追加
+use Illuminate\Support\Facades\DB;
 
 
 class UserController extends Controller
 {
     public function index(Request $request){
 
-        $users = User::query()->get();
+        $users = User::query();
         $keyword = $request->input('keyword');
         if(!empty($keyword)){
             $users->where('name','LIKE',"%{$keyword}%")

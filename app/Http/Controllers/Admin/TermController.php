@@ -19,7 +19,7 @@ class TermController extends Controller
         return view('admin.terms.index',compact('terms'));
     }
 
-    public function edit(Term $term, $id)
+    public function edit(Term $term)
     {
         $terms = Term::get()->last();
         return view('admin.terms.edit',compact('terms'));

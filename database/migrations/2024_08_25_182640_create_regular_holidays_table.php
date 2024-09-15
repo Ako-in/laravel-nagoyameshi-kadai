@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('regular_holidays', function (Blueprint $table) {
             $table->id();
-            $table->string('day')->default('Monday');;
+            $table->string('day')->nullable();
             $table->integer('day_index')->nullable();
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      */
