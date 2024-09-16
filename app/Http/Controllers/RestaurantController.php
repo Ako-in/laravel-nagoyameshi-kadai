@@ -100,7 +100,8 @@ class RestaurantController extends Controller
 
     public function show(Request $request, $id){
         if (auth()->guard('admin')->check()) {
-            abort(403); // 403 Forbidden
+            // abort(403); // 403 Forbidden
+            return redirect()->route('admin.login');
         }
         $restaurant = Restaurant::find($id);
         return view('restaurants.show',compact('restaurant'));
