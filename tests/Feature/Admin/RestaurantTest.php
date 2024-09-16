@@ -22,7 +22,6 @@ class RestaurantTest extends TestCase
 {
     use RefreshDatabase;
 
-
     // indexアクション（店舗一覧ページ）
     public function test_not_login_adminuser_cannot_access_to_restaurants_index(): void
     // 未ログインadminのユーザーは管理者側の店舗一覧ページにアクセスできない
