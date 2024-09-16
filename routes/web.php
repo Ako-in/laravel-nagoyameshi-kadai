@@ -82,12 +82,16 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('user/index', [UserController::class,'index'])->name('user.index');
     Route::get('user/{user}/edit', [UserController::class,'edit'])->name('user.edit');
     Route::put('user/{user}', [UserController::class,'update'])->name('user.update');
+    
 });
 
-// Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index')->middleware('can:viewAny,App\Models\Restaurant');
-// Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
-// ->middleware('can:viewAny,App\Models\Restaurant')
-// ->name('restaurants.index');
+
+
+Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
+Route::get('restaurants/{restaurant}',[RestaurantController::class,'show'])->name('restaurants.show');
+
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('restaurants/index', [RestaurantController::class, 'index'])->name('restaurants.index');
