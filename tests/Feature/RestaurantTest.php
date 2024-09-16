@@ -49,4 +49,40 @@ class RestaurantTest extends TestCase
         $response->assertStatus(403);
 
     }
+
+    // 未ログインのユーザーは会員側の店舗詳細ページにアクセスできる
+    // ログイン済みの一般ユーザーは会員側の店舗詳細ページにアクセスできる
+    // ログイン済みの管理者は会員側の店舗詳細ページにアクセスできない
+    public function test_not_login_user_can_access_to_restaurants_show(): void
+    // ログインしていないユーザー:管理者側の会員詳細ページにアクセスできる
+    {
+        $response = $this->get('login');//未ログインの状態で'login'にアクセス
+        $restaurant = Restaurant::factory()->create();
+        $response = $this->get(route('restaurants.show',['restaurant' => $restaurant->id]));//詳細ページにアクセス
+        // $response->assertRedirect(route('restaurant.show'));
+        $response->assertStatus(200);
+    }
+
+    public function test_user_login_can_access_to_restaurants_show(): void
+    // ログイン済みの一般ユーザー:管理者側の店舗詳細ページにアクセスできる
+    {
+        $user = User::factory()->create();//テストユーザー作成
+        $this->actingAs($user);//テストユーザーでログイン
+        $restaurant = Restaurant::factory()->create();
+        $response = $this->get(route('restaurants.show',['restaurant' => $restaurant->id]));//詳細ページにアクセス
+        $response->assertStatus(200);
+    }
+
+    public function test_login_adminuser_cannot_access_to_restaurants_show(): void
+    {
+        // ログイン済みの管理者:管理者側の店舗詳細ページにアクセスできない
+        $admin = new Admin();
+        $admin->email = 'admin@example.com';
+        $admin->password = Hash::make('nagoyameshi');
+
+        $restaurant = Restaurant::factory()->create();
+        $response = $this->actingAs($admin, 'admin')->get(route('restaurants.show', ['restaurant' => $restaurant->id]));
+        // $response->assertRedirect(route('admin.login'));
+        $response->assertStatus(403);
+    }
 }

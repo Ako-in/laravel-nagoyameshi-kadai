@@ -80,4 +80,12 @@ class RestaurantController extends Controller
         }
         return view('restaurants.index',compact('restaurants','keyword','total','category_id','price','sorts','sorted','sort_query','categories'));
     }
+
+    public function show(Request $request, $id){
+        if (auth()->guard('admin')->check()) {
+            abort(403); // 403 Forbidden
+        }
+        $restaurant = Restaurant::find($id);
+        return view('restaurants.show',compact('restaurant'));
+    }
 }
