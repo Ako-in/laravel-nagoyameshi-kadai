@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http;
+// namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -21,6 +22,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        // 'subscribed' => \App\Http\Middleware\Subscribed::class, // 'subscribed' のエイリアスを指定
+        // 'not.subscribed' => \App\Http\Middleware\NotSubscribed::class,
     ];
 
     /**
@@ -65,5 +68,14 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         // 'admin' => \App\Http\Middleware\RedirectIfAdmin::class,
+        'subscribed' => \App\Http\Middleware\Subscribed::class,
+        'not.subscribed'=>\App\Http\Middleware\NotSubscribed::class,
+        
     ];
+
+    // protected $routeMiddleware = [
+    //     'subscribed' => \App\Http\Middleware\Subscribed::class,
+    //     'not.subscribed' => \App\Http\Middleware\NotSubscribed::class,
+    // ];
+    
 }

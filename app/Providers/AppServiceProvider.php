@@ -6,6 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\Paginator;
+use Laravel\Cashier\Cashier;  // Cashier クラスのインポート
+use App\Models\User;  // User モデルのインポート
+use Laravel\Cashier\Billable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +29,9 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
         Paginator::useBootstrap();
+
+        // Cashier に User モデルを指定
+        // Cashier::useCustomerModel(User::class);
+        Cashier::useCustomerModel(User::class);
     }
 }

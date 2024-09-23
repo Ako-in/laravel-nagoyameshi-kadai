@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,7 +58,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::put('categories/{category}',[Admin\CategoryController::class,'update'])->name('categories.update');
     Route::get('categories/{category}/edit',[Admin\CategoryController::class,'edit'])->name('categories.edit');
     
-    Route::resource('categories',Admin\CategoryController::class);
+    // Route::resource('categories',Admin\CategoryController::class);
 
     // Route::resource('company', Admin\CompanyController::class)->only(['index', 'edit', 'update']);
     Route::get('company/index', [Admin\CompanyController::class, 'index'])->name('company.index');
@@ -69,32 +70,91 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::put('terms/{term}',[Admin\TermController::class,'update'])->name('terms.update');
 });
 
-Route::group(['middleware' => 'guest:admin'], function () {
-    // Route::get('/',[HomeController::class,'index'])->name('home');
-    Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
-    // Route::get('user/index',[UserController::class,'index'])->name('user.index');
-    // Route::get('user/{user}/edit',[UserController::class,'edit'])->name('user.edit');
-    // Route::put('user/{user}',[UserController::class,'update'])->name('user.update');
-});
+// Route::group(['middleware' => 'guest:admin'], function () {
+//     // Route::get('/',[HomeController::class,'index'])->name('home');
+//     // Route::get('/home', function () {
+//     //     if (auth()->user()->isAdmin()) {
+//     //         return redirect()->route('admin.home');
+//     //     }
+//     //     return view('home');
+//     // })->middleware('auth')->name('home');
 
-// 通常ユーザー向けルート
-Route::group(['middleware' => ['auth', 'verified']], function () {
-    Route::get('user/index', [UserController::class,'index'])->name('user.index');
-    Route::get('user/{user}/edit', [UserController::class,'edit'])->name('user.edit');
-    Route::put('user/{user}', [UserController::class,'update'])->name('user.update');
-    
-});
-
-
-
+// });
 Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
 Route::get('restaurants/{restaurant}',[RestaurantController::class,'show'])->name('restaurants.show');
 
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('user/index', [UserController::class, 'index'])->name('user.index');
+    Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('user/{user}', [UserController::class, 'update'])->name('user.update');
 
+    // Route::group(['middleware' => ['auth', 'not.subscribed']], function () {
+    // // Route::group(['middleware' => [NotSubscribed::class]], function () {
+    //     Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+    //     Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
+    // });
+    // Route::group(['middleware' => ['auth', 'subscribed']], function () {
+    // // Route::group(['middleware' => [Subscribed::class]], function () {
+    //     Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
+    //     Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
+    //     Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
+    //     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+    // });
+});
 
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('restaurants/index', [RestaurantController::class, 'index'])->name('restaurants.index');
+Route::group(['middleware' => ['auth','verified','not.subscribed']], function () {
+    // Route::group(['middleware' => [NotSubscribed::class]], function () {
+        Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+        Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
+});
+Route::group(['middleware' => ['auth', 'verified', 'subscribed']], function () {
+    // Route::group(['middleware' => [Subscribed::class]], function () {
+        Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
+        Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
+        Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
+        Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });
 
 
+
+// // 通常ユーザー向けルート
+// Route::group(['middleware' => ['auth', 'verified']], function () {
+//     Route::get('user/index', [UserController::class, 'index'])->name('user.index');
+//     Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+//     Route::put('user/{user}', [UserController::class, 'update'])->name('user.update');
+
+//     Route::group(['middleware' => [NotSubscribed::class]], function () {
+//         Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('');
+//         Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
+//     });
+
+//     Route::group(['middleware' => [Subscribed::class]], function () {
+//         Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
+//         Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
+//         Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
+//         Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+//     });
+// });
+
+
+
+// // 通常ユーザー向けルート
+// Route::group(['middleware' => ['auth', 'verified']], function () {
+//     Route::get('user/index', [UserController::class,'index'])->name('user.index');
+//     Route::get('user/{user}/edit', [UserController::class,'edit'])->name('user.edit');
+//     Route::put('user/{user}', [UserController::class,'update'])->name('user.update');
+
+//     Route::group(['middleware' => [NotSubscribed::class]]->function () {
+//         Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+//         Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
+//     });
+    
+//     Route::group(['middleware' => [Subscribed::class]]->function () {
+//         Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
+//         Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
+//         Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
+//         Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+//     });
+    
+// });
