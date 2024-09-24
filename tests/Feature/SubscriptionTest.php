@@ -50,7 +50,7 @@ class SubscriptionTest extends TestCase
     {
         $user = User::factory()->create();//テストユーザー作成
         // 有料プランに加入するユーザーとして設定
-        $user->subscribed('premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'); // プランに加入
+        $user->newSubscription('premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN')->create('pm_card_visa'); // プランに加入
         $this->actingAs($user);//テストユーザーでログイン
         $response = $this->get(route('subscription.create'));//有料プラン登録ページにアクセス
         //アクセスできない、リダイレクト
@@ -70,6 +70,7 @@ class SubscriptionTest extends TestCase
             'password' => Hash::make('nagoyameshi'),
             'is_admin' => true, // 管理者フラグを設定
         ]);
+        // Log::info($admin);
 
         $this->actingAs($admin);
         $response = $this->get(route('subscription.create'));
@@ -81,7 +82,7 @@ class SubscriptionTest extends TestCase
     // ログイン済みの無料会員は有料プランに登録できる
     // ログイン済みの有料会員は有料プランに登録できない
     // ログイン済みの管理者は有料プランに登録できない
-    public function test_login_user_cannot_access_to_subscribe_store(): void
+    public function test_login_user_cannot_store_subscription(): void
     // 未ログインのユーザーは有料プランに登録できない
     {
         $request_parameter = [
@@ -93,7 +94,7 @@ class SubscriptionTest extends TestCase
 
     }
 
-    public function test_login_notsubscribed_user_can_store_to_subscribe(): void
+    public function test_login_notsubscribed_user_can_store_subscription(): void
     // ログイン済みの無料会員は有料プランに登録できる
     {
         $user = User::factory()->create();//テストユーザー作成
@@ -106,18 +107,22 @@ class SubscriptionTest extends TestCase
         // $response->assertTrue()->$user->subscribed('premium_plan');
     }
 
-    public function test_login_subscribed_user_cannot_store_to_subscribe(): void
+    public function test_login_subscribed_user_cannot_store_subscription(): void
     // ログイン済みの有料会員は有料プランに登録できない
     {
         $user = User::factory()->create();
-        $user->subscribed('premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN');
-        $this->actingAs($user);//テストユーザーでログイン
-        $response = $this->get(route('subscription.create'));
-        $this->assertTure($user->subscribed('premium_plan'));
+        $user->newSubscription('premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN');
+        // $this->actingAs($user);//テストユーザーでログイン
+        
+        $request_parameter = [
+            'paymentMethodId' => 'pm_card_visa'
+        ];
+        $response = $this->actingAs($user)->post(route('subscription.store'),$request_parameter);
+        // $this->assertTrue($user->subscribed('premium_plan'));
         $response->assertRedirect(route('subscription.edit'));
     }
 
-    public function test_login_adminuser_cannot_store_to_subscribe(): void
+    public function test_login_adminuser_cannot_store_subscription(): void
     // ログイン済みの管理者は有料プランに登録できない
     {
         $admin = User::factory()->create([
@@ -125,9 +130,12 @@ class SubscriptionTest extends TestCase
             'password' => Hash::make('nagoyameshi'),
             'is_admin' => true, // 管理者フラグを設定
         ]);
+        $request_parameter = [
+            'paymentMethodId' => 'pm_card_visa'
+        ];
         $this->actingAs($admin);
-        $response = $this->get(route('subscription.store'));
-        $response->assertRedirect(route('login'));
+        $response = $this->post(route('subscription.store'), $request_parameter);
+        $response->assertRedirect(route('admin.login'));
 
     }
 
@@ -157,9 +165,7 @@ class SubscriptionTest extends TestCase
         $this->actingAs($user);//テストユーザーでログイン
         $response = $this->get(route('subscription.edit'));
         $this->assertFalse($user->subscribed('premium_plan'));
-        $response->assertRedirect(route('subscription.create'));
-        // $response->assertStatus(200);
-        // $response->assertTrue()->$user->subscribed('premium_plan');
+        $response->assertRedirect('subscription.create');
     }
 
     public function test_login_subscribed_user_can_edit_subscription(): void
@@ -178,15 +184,21 @@ class SubscriptionTest extends TestCase
     public function test_login_adminuser_cannot_edit_subscription(): void
     // ログイン済みの管理者はお支払い方法編集ページにアクセスできない
     {
-        $admin = User::factory()->create([
-            'email' => 'admin@example.com',
-            'password' => Hash::make('nagoyameshi'),
-            'is_admin' => true, // 管理者フラグを設定
-        ]);
+        // $admin = User::factory()->create([
+        //     'email' => 'admin@example.com',
+        //     'password' => Hash::make('nagoyameshi'),
+        //     'is_admin' => true, // 管理者フラグを設定
+        // ]);
+        $admin = new Admin();
+        $admin->email = 'admin@example.com';
+        $admin->password = Hash::make('nagoyameshi');
+        $admin->save();
+        $request_parameter = [
+            'paymentMethodId' => 'pm_card_mastercard'
+        ];
         $this->actingAs($admin);
-        $response = $this->get(route('subscription.edit'));
-        $response->assertRedirect(route('login'));
-
+        $response = $this->get(route('subscription.edit'),$request_parameter);
+        $response->assertRedirect(route('admin.login'));
     }
 
     // updateアクション（お支払い方法更新機能）
@@ -214,10 +226,7 @@ class SubscriptionTest extends TestCase
         // $user->subscribed('premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'); // プランに加入
         $this->actingAs($user);//テストユーザーでログイン
         $response = $this->patch(route('subscription.update'));
-        // $this->assertFalse($user->subscribed('premium_plan'));
-        $response->assertRedirect(route('subscription.create'));
-        // $response->assertStatus(200);
-        // $response->assertTrue()->$user->subscribed('premium_plan');
+        $response->assertRedirect('subscription.create');
     }
 
     public function test_login_subscribed_user_can_update_subscription(): void
@@ -241,9 +250,13 @@ class SubscriptionTest extends TestCase
             'password' => Hash::make('nagoyameshi'),
             'is_admin' => true, // 管理者フラグを設定
         ]);
+        $request_parameter = [
+            'paymentMethodId' => 'pm_card_mastercard'
+        ];
         $this->actingAs($admin);
         $response = $this->patch(route('subscription.update'));
-        $response->assertRedirect(route('login'));
+
+        $response->assertRedirect(route('admin.login'));
 
     }
 

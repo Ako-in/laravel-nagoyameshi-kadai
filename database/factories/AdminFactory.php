@@ -16,8 +16,8 @@ class AdminFactory extends Factory
     {
         $factory->define(Admin::class, function (Faker $faker) {
             return [
-                'name' => $faker->name, // name カラムに適切な値を設定
-                'email' => $faker->unique()->safeEmail,
+                'name' => $this->faker->name, // name カラムに適切な値を設定
+                'email' => $this->faker->unique()->safeEmail,
                 'password' => bcrypt('password'),
             ];
         });

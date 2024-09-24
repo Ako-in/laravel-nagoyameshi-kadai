@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_admin')->default(1)->after('password'); // `is_admin` カラムを追加
+            $table->boolean('is_admin')->default(0)->after('password'); // `is_admin` カラムを追加
         });
     }
 

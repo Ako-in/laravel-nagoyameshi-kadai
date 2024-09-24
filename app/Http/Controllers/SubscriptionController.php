@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 
@@ -24,17 +25,22 @@ class SubscriptionController extends Controller
      */
     public function create(Request $request)
     {
+        // log::info('111');
         // 管理者ユーザーであればログインページにリダイレクト
         if ($request->user()->is_admin) {
+            // log::info('112');
+            log::info($request->user());
             return redirect()->route('login');
         }
         if ($request->user()->subscribed('premium_plan')) {
+            // log::info('222');
             return redirect()->route('subscription.edit'); // 既に加入している場合はリダイレクト
         }
         // $admin = User::factory()->create(['is_admin' => true]);
         // if ($user->is_admin) {
         //     return redirect()->route('login'); // 管理者ユーザーはリダイレクト
         // }
+        // log::info('333');
         $intent = $request->user()->createSetupIntent();
         return view('subscription.create',compact('intent'));
     }
@@ -59,7 +65,8 @@ class SubscriptionController extends Controller
         //         'premium_plan', 'price_monthly'
         //     )->create($request->paymentMethodId);
         // });
-        return redirect()->route('home')->with('flash_message','有料プランへの登録が完了しました。');
+        // return redirect()->route('home')->with('flash_message','有料プランへの登録が完了しました。');
+        return redirect()->route('subscription.edit')->with('flash_message','有料プランへの登録が完了しました。');
     }
 
     /**
@@ -75,18 +82,25 @@ class SubscriptionController extends Controller
      */
     public function edit(User $user)
     {
-        if ($request->user()->is_admin) {
-            return redirect()->route('login'); // 管理者はリダイレクト
+        // if ($request->user()->is_admin) {
+        //     return redirect()->route('login'); // 管理者はリダイレクト
+        // }
+        // log::info('aaa');
+        if (auth()->user()->is_admin) {
+            // log::info('bbb');
+            return redirect()->route('login');
         }
+        
         $user = Auth::user();
-
+        // log::info('ccc');
         // dd($user);
         // $subsctiption = auth::user()->subscription;
         // $user = Auth::user();
         // $subscription = Subscription::findOrFail($id);
         $intent = $user->createSetupIntent();
+        // log::info('ddd');
         // return view('subscription.edit',compact('subscription'));
-        return redirect()->route('subscription.edit', compact('user','intent'));
+        return view ('subscription.edit', compact('user','intent'));
     }
 
     /**

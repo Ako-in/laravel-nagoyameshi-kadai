@@ -108,7 +108,7 @@ Route::group(['middleware' => ['auth','verified','not.subscribed']], function ()
         Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
         Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
 });
-Route::group(['middleware' => ['auth', 'verified', 'subscribed']], function () {
+Route::group(['middleware' => ['auth', 'verified']], function () {
     // Route::group(['middleware' => [Subscribed::class]], function () {
         Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
         Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
