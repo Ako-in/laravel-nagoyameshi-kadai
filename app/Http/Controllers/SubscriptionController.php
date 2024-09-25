@@ -12,6 +12,11 @@ use App\Http\Controllers\UserController;
 
 class SubscriptionController extends Controller
 {
+//     public function showEditForm()
+// {
+//     $stripeKey = config('services.stripe.secret');
+//     return view('subscription.edit', compact('stripeKey'));
+// }
     /**
      * Display a listing of the resource.
      */
@@ -23,26 +28,31 @@ class SubscriptionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
         // log::info('111');
         // 管理者ユーザーであればログインページにリダイレクト
-        if ($request->user()->is_admin) {
-            // log::info('112');
-            log::info($request->user());
-            return redirect()->route('login');
-        }
-        if ($request->user()->subscribed('premium_plan')) {
-            // log::info('222');
-            return redirect()->route('subscription.edit'); // 既に加入している場合はリダイレクト
-        }
-        // $admin = User::factory()->create(['is_admin' => true]);
-        // if ($user->is_admin) {
-        //     return redirect()->route('login'); // 管理者ユーザーはリダイレクト
+        // if ($request->user()->is_admin) {
+        //     // log::info('112');
+        //     log::info($request->user());
+        //     return redirect()->route('login');
         // }
-        // log::info('333');
-        $intent = $request->user()->createSetupIntent();
-        return view('subscription.create',compact('intent'));
+        // if ($request->user()->subscribed('premium_plan')) {
+        //     // log::info('222');
+        //     return redirect()->route('subscription.edit'); // 既に加入している場合はリダイレクト
+        // }
+        // // $admin = User::factory()->create(['is_admin' => true]);
+        // // if ($user->is_admin) {
+        // //     return redirect()->route('login'); // 管理者ユーザーはリダイレクト
+        // // }
+        // // log::info('333');
+        // $intent = $request->user()->createSetupIntent();
+        // return view('subscription.create',compact('intent'));
+
+
+        $intent = Auth::user()->createSetupIntent();
+
+        return view('subscription.create', compact('intent'));
     }
 
     /**
