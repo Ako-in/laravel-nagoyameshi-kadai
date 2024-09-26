@@ -10,6 +10,7 @@
             
             // その他のコード（抜粋）...
         });
+        
     </script>
     <script src="{{ asset('/js/stripe.js') }}"></script>
 @endpush
