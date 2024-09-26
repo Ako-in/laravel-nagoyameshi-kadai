@@ -217,11 +217,11 @@ document.addEventListener('DOMContentLoaded', function() {
   cardButton.addEventListener('click', async (e) => {
       e.preventDefault();
       
-      const postalCode = document.getElementById('postal-code').value;
-      if (!/^\d{3}-\d{4}$/.test(postalCode)) {
-          alert('郵便番号は、例：123-4567形式で入力してください。');
-          return;
-      }
+      // const postalCode = document.getElementById('postal-code').value;
+      // if (!/^\d{3}-\d{4}$/.test(postalCode)) {
+      //     alert('郵便番号は、例：123-4567形式で入力してください。');
+      //     return;
+      // }
 
       const { setupIntent, error } = await stripe.confirmCardSetup(
           clientSecret, {
@@ -229,9 +229,9 @@ document.addEventListener('DOMContentLoaded', function() {
                   card: cardElement,
                   billing_details: {
                       name: cardHolderName.value,
-                      address: {
-                          postal_code: postalCode
-                      }
+                      // address: {
+                      //     postal_code: postalCode
+                      // }
                   }
               }
           });

@@ -76,7 +76,7 @@ class SubscriptionController extends Controller
         //     )->create($request->paymentMethodId);
         // });
         // return redirect()->route('home')->with('flash_message','有料プランへの登録が完了しました。');
-        return redirect()->route('subscription.edit')->with('flash_message','有料プランへの登録が完了しました。');
+        return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
     }
 
     /**
@@ -123,11 +123,10 @@ class SubscriptionController extends Controller
         //     $user->createAsStripeCustomer();
         // }
 
-        
         // デフォルトの支払い方法を更新
         // $user->updateDefaultPaymentMethod($paymentMethodId);
         $user->updateDefaultPaymentMethod($request->paymentMethodId);
-        return redirect()->route('home')->with('flash_message','お支払い方法を変更しました。');
+        return redirect()->route('user.index')->with('flash_message','お支払い方法を変更しました。');
 
     }
     

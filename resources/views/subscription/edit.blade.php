@@ -43,7 +43,7 @@
                             @else
                                 <span>支払い方法が設定されていません</span>
                             @endif
-                            {{-- <span>{{ $user->defaultPaymentMethod()->billing_details->name  }}</span> --}}
+                            <span>{{ $user->defaultPaymentMethod()->billing_details->name  }}</span>
                         </div>
                     </div>
 

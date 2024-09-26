@@ -3,13 +3,13 @@
 @push('scripts')
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        // document.addEventListener('DOMContentLoaded', function() {
             const stripeKey = "{{ env('STRIPE_KEY') }}";
-            const stripe = Stripe(stripeKey);
-            const elements = stripe.elements();
+            // const stripe = Stripe(stripeKey);
+            // const elements = stripe.elements();
             
             // その他のコード（抜粋）...
-        });
+        // });
         
     </script>
     <script src="{{ asset('/js/stripe.js') }}"></script>
