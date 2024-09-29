@@ -12,6 +12,12 @@ use App\Http\Controllers\UserController;
 
 class SubscriptionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    
     public function create()
     {
         $user = Auth::user();
@@ -32,12 +38,23 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        $request->user()->newSubscription(
-            'premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'
-        )->create($request->paymentMethodId);
-        return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
+        // $request->user()->newSubscription(
+        //     'premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'
+        // )->create($request->paymentMethodId);
+        // return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
+
+        try {
+            $request->user()->newSubscription(
+                'premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'
+            )->create($request->paymentMethodId);
+    
+            return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
+        } catch (\Exception $e) {
+            Log::error('Subscription creation failed: '.$e->getMessage());
+            return back()->with('error', 'サブスクリプションの登録に失敗しました。');
+        }
     }
 
     public function edit()
