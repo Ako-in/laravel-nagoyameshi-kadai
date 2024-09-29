@@ -26,6 +26,7 @@ class Restaurant extends Model
         'image',
         'day',
         'day_index',
+        'rating',
     ];
 
     protected $casts = [

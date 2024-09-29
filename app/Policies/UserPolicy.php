@@ -22,6 +22,11 @@ class UserPolicy
         // 通常のユーザー権限チェック
         return $authUser->id === $user->id;
     }
+    public function edit(User $user)
+    {
+        return !$user->is_admin; // 管理者はアクセスできない
+    }
+
 
     
 }
