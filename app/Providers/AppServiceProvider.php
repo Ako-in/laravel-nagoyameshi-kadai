@@ -33,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
         // Cashier に User モデルを指定
         // Cashier::useCustomerModel(User::class);
         Cashier::useCustomerModel(User::class);
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
     }
 }

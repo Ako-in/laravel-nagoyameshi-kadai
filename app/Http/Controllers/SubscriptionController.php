@@ -20,6 +20,7 @@ class SubscriptionController extends Controller
     
     public function create()
     {
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));    
         $user = Auth::user();
         if (auth()->user()->isAdmin()) {
             return redirect()->route('admin.home');
