@@ -67,6 +67,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
         // 追加の boot 処理
         Cashier::useCustomerModel(User::class);
+
+        
     }
 
     public function isAdmin()
