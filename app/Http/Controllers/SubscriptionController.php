@@ -14,13 +14,16 @@ class SubscriptionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth');// ログインしているかを確認
+        $this->middleware('verified'); // メール確認済みかを確認
     }
 
     
     public function create()
     {
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));    
+        Log::info('aaa');
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        Log::info('bbb');
         $user = Auth::user();
         if (auth()->user()->isAdmin()) {
             return redirect()->route('admin.home');
@@ -28,9 +31,9 @@ class SubscriptionController extends Controller
         if ($user->subscribed('premium_plan')) {
             return redirect()->route('subscription.edit');
         }
-
+        Log::info('ccc');
         $intent = Auth::user()->createSetupIntent();
-
+        Log::info('ddd');
         return view('subscription.create', compact('intent'));
     }
 
@@ -116,6 +119,6 @@ class SubscriptionController extends Controller
         }
         $user->subscription('premium_plan')->cancelNow();
 
-        return to_route('home')->with('flash_message', '有料プランを解約しました。');
+        return to_route('user.index')->with('flash_message', '有料プランを解約しました。');
     }
 }

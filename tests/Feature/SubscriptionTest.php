@@ -97,6 +97,7 @@ class SubscriptionTest extends TestCase
         $response = $this->get(route('subscription.create'));
         $this->assertFalse($user->subscribed('premium_plan'));
         $response->assertStatus(200);
+        // $response->assertRedirect('user.index');
     }
 
     public function test_login_subscribed_user_cannot_store_subscription(): void
