@@ -60,6 +60,8 @@ class SubscriptionController extends Controller
             )->create($request->paymentMethodId);
             Log::info('333');
             return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
+            
+
         } catch (\Exception $e) {
             Log::info('444');
             Log::error('Subscription creation failed: '.$e->getMessage());
