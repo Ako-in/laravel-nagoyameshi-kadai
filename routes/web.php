@@ -105,7 +105,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 Route::group(['middleware' => ['auth','verified','not.subscribed']], function () {
     // Route::group(['middleware' => [NotSubscribed::class]], function () {
-        Route::post('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+        Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
         Route::post('subscription/store', [SubscriptionController::class, 'store'])->name('subscription.store');
 });
 

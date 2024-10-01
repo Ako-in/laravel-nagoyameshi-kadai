@@ -74,7 +74,7 @@
 
                 </form> --}}
                 
-                <form id="card-form" action="{{ route('subscription.create') }}" method="post">
+                <form id="card-form" action="{{ route('subscription.store') }}" method="post">
                     @csrf
                     <input class="nagoyameshi-card-holder-name mb-3" id="card-holder-name" type="text" placeholder="カード名義人" required>
                     <div class="nagoyameshi-card-element mb-4" id="card-element"></div>

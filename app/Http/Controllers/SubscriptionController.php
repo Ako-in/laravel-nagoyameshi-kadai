@@ -42,6 +42,7 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('111');
         $stripeKey = config('services.stripe.secret');
         Log::info('Stripe Secret: ' . $stripeKey); // ログに出力して確認
 
@@ -52,14 +53,15 @@ class SubscriptionController extends Controller
         // )->create($request->paymentMethodId);
         // return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
+        Log::info('222');
         try {
             $request->user()->newSubscription(
                 'premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'
             )->create($request->paymentMethodId);
-    
+            Log::info('333');
             return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
         } catch (\Exception $e) {
+            Log::info('444');
             Log::error('Subscription creation failed: '.$e->getMessage());
             return back()->with('error', 'サブスクリプションの登録に失敗しました。');
         }
