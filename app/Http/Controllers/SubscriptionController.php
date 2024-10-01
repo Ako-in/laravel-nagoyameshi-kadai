@@ -21,13 +21,13 @@ class SubscriptionController extends Controller
     
     public function create()
     {
-        Log::info('aaa1');
+        // Log::info('aaa1');
         var_dump('aaa2');//returnしたら消える
-        dd('aaa3');
+        // dd('aaa3');
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        Log::info('bbb1');
+        // Log::info('bbb1');
         var_dump('bbb2');//returnしたら消える
-        dd('bbb3');
+        // dd('bbb3');
         $user = Auth::user();
         if (auth()->user()->isAdmin()) {
             return redirect()->route('admin.home');
@@ -35,13 +35,13 @@ class SubscriptionController extends Controller
         if ($user->subscribed('premium_plan')) {
             return redirect()->route('subscription.edit');
         }
-        Log::info('ccc1');
+        // Log::info('ccc1');
         var_dump('ccc2');//returnしたら消える
-        dd('ccc3');
+        // dd('ccc3');
         $intent = Auth::user()->createSetupIntent();
-        Log::info('ddd1');
+        // Log::info('ddd1');
         var_dump('ddd2');//returnしたら消える
-        dd('ddd3');
+        // dd('ddd3');
         return view('subscription.create', compact('intent'));
     }
 
@@ -50,9 +50,9 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info('111-1');
+        // Log::info('111-1');
         var_dump('111-2');//returnしたら消える
-        dd('111-3');
+        // dd('111-3');
         $stripeKey = config('services.stripe.secret');
         Log::info('Stripe Secret: ' . $stripeKey); // ログに出力して確認
 
@@ -63,23 +63,23 @@ class SubscriptionController extends Controller
         // )->create($request->paymentMethodId);
         // return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        Log::info('222-1');
+        // Log::info('222-1');
         var_dump('222-2');//returnしたら消える
-        dd('222-3');
+        // dd('222-3');
         try {
             $request->user()->newSubscription(
                 'premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'
             )->create($request->paymentMethodId);
-            Log::info('333-1');
+            // Log::info('333-1');
             var_dump('333-2');//returnしたら消える
-            dd('333-3');//そのあとは止まる
+            // dd('333-3');//そのあとは止まる
             return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
             
 
         } catch (\Exception $e) {
-            var_dump('444-1');//returnしたら消える
+            // var_dump('444-1');//returnしたら消える
             dd('444-2');//そのあとは止まる
-            Log::info('444-3');
+            // Log::info('444-3');
             Log::error('Subscription creation failed: '.$e->getMessage());
             return back()->with('error', 'サブスクリプションの登録に失敗しました。');
         }

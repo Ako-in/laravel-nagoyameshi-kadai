@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 
 class UserController extends Controller
@@ -26,13 +27,13 @@ class UserController extends Controller
     // if (auth()->user()->cannot('viewAny', User::class)) {
     //     abort(403, 'Unauthorized');
     // }
-    Log::info('444-1');
+    // Log::info('444-1');
     var_dump('444-2');//returnしたら消える
-    dd('444-3');
+    // dd('444-3');
     $user = Auth::user();
-    Log::info('555-1');
+    // Log::info('555-1');
     var_dump('555-2');//returnしたら消える
-    dd('555-3');
+    // dd('555-3');
     return view('user.index', compact('user'));
 
 }
