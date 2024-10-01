@@ -57,7 +57,6 @@ class SubscriptionController extends Controller
         Log::info('Stripe Secret: ' . $stripeKey); // ログに出力して確認
 
         // $user = Auth::user();
-
         // $request->user()->newSubscription(
         //     'premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'
         // )->create($request->paymentMethodId);
@@ -66,23 +65,29 @@ class SubscriptionController extends Controller
         // Log::info('222-1');
         var_dump('222-2');//returnしたら消える
         // dd('222-3');
-        try {
-            $request->user()->newSubscription(
-                'premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'
-            )->create($request->paymentMethodId);
-            // Log::info('333-1');
-            var_dump('333-2');//returnしたら消える
-            // dd('333-3');//そのあとは止まる
-            return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
-            
+        // try {
+        //     $request->user()->newSubscription(
+        //         'premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'
+        //     )->create($request->paymentMethodId);
+        //     // Log::info('333-1');
+        //     var_dump('333-2');//returnしたら消える
+        //     // dd('333-3');//そのあとは止まる
+        //     return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
+        // } catch (\Exception $e) {
+        //     // var_dump('444-1');//returnしたら消える
+        //     dd('444-2');//そのあとは止まる
+        //     // Log::info('444-3');
+        //     Log::error('Subscription creation failed: '.$e->getMessage());
+        //     return back()->with('error', 'サブスクリプションの登録に失敗しました。');
+        // }
 
-        } catch (\Exception $e) {
-            // var_dump('444-1');//returnしたら消える
-            dd('444-2');//そのあとは止まる
-            // Log::info('444-3');
-            Log::error('Subscription creation failed: '.$e->getMessage());
-            return back()->with('error', 'サブスクリプションの登録に失敗しました。');
-        }
+
+        $request->user()->newSubscription(
+            'premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN'
+        )->create($request->paymentMethodId);
+        var_dump('zzz-1');
+        return redirect()->route('user.index')->with('flash_message','有料プランへの登録が完了しました。');
+        var_dump('zzz-2');
     }
 
     public function edit()
