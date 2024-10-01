@@ -12,11 +12,11 @@ use App\Http\Controllers\UserController;
 
 class SubscriptionController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');// ログインしているかを確認
-        $this->middleware('verified'); // メール確認済みかを確認
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');// ログインしているかを確認
+    //     $this->middleware('verified'); // メール確認済みかを確認
+    // }
 
     
     public function create()
