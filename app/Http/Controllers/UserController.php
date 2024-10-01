@@ -26,9 +26,13 @@ class UserController extends Controller
     // if (auth()->user()->cannot('viewAny', User::class)) {
     //     abort(403, 'Unauthorized');
     // }
-    Log::info('444');
+    Log::info('444-1');
+    var_dump('444-2');//returnしたら消える
+    dd('444-3');
     $user = Auth::user();
-    Log::info('555');
+    Log::info('555-1');
+    var_dump('555-2');//returnしたら消える
+    dd('555-3');
     return view('user.index', compact('user'));
 
 }
