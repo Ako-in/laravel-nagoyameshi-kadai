@@ -27,18 +27,10 @@ class UserController extends Controller
     // if (auth()->user()->cannot('viewAny', User::class)) {
     //     abort(403, 'Unauthorized');
     // }
-    // Log::info('444-1');
-    var_dump('444-2');//returnしたら消える
-    // dd('444-3');
     $user = Auth::user();
-    // Log::info('555-1');
-    var_dump('555-2');//returnしたら消える
-    // dd('555-3');
     return view('user.index', compact('user'));
 
 }
-
-
 
     public function show(Request $request, User $user)
     {
@@ -99,10 +91,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'kana' => 'required|string|regex:/\A[ァ-ヴー\s]+\z/u|max:255',
             'postal_code' => 'required|digits:7',
-        'address' => 'required|string|max:255',
-        'phone_number' => 'required|digits_between:10,11',
-        'birthday' => 'nullable|digits:8',
-        'occupation' => 'nullable|string|max:255',
+            'address' => 'required|string|max:255',
+            'phone_number' => 'required|digits_between:10,11',
+            'birthday' => 'nullable|digits:8',
+            'occupation' => 'nullable|string|max:255',
         ]);
 
         $user->update($request->only([

@@ -319,7 +319,7 @@ class SubscriptionTest extends TestCase
         $user->newSubscription('premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN')->create('pm_card_mastercard'); // プランに加入
         $this->actingAs($user);
         $response = $this->delete(route('subscription.destroy'));
-        $response->assertRedirect(route('home'));
+        $response->assertRedirect(route('user.index'));
 
     }
 
@@ -330,7 +330,7 @@ class SubscriptionTest extends TestCase
         $user->newSubscription('premium_plan','price_1PzdMARwYcrGBVKOF9TPpaqN')->create('pm_card_mastercard');
         $this->actingAs($user);
         $response = $this->delete(route('subscription.destroy'));
-        $response->assertRedirect(route('home'));
+        $response->assertRedirect(route('user.index'));
     }
 
     public function test_login_adminuser_cannot_destroy_subscription(): void
