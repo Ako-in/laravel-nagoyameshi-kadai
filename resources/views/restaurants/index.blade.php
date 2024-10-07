@@ -133,7 +133,18 @@
                                                 @endif
                                             </div>
                                             <hr class="my-2">
-                                            <div class="mb-1">
+                                            @if($restaurant)
+                                                @if($restaurant->reviews && $restaurant->reviews->isNotEmpty())
+                                                    <p class="mb-1">
+                                                        <span class="nagoyameshi-star-rating me-1" data-rate="{{ round($restaurant->reviews->avg('score') * 2) / 2 }}"></span>
+                                                        {{ number_format(round($restaurant->reviews->avg('score'), 2), 2) }}（{{ $restaurant->reviews->count() }}件）
+                                                    </p>
+                                                @else
+                                                    <p>まだレビューがありません。</p>
+                                                @endif    
+                                            @else
+                                                    <p>レストラン情報がありません</p>
+                                            @endif                                            <div class="mb-1">
                                                 <span>{{ number_format($restaurant->lowest_price) }}円～{{ number_format($restaurant->highest_price) }}円</span>
                                             </div>
                                             <p class="card-text">{{ mb_substr($restaurant->description, 0, 75) }}@if (mb_strlen($restaurant->description) > 75)...@endif</p>

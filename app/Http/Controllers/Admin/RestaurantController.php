@@ -175,6 +175,5 @@ class RestaurantController extends Controller
     {
         $restaurant->delete();
         return to_route('admin.restaurants.index')->with('flash_message','店舗を削除しました。');
-        
     }
 }

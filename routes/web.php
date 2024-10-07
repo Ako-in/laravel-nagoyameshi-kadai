@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,20 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('user/{user}', [UserController::class, 'update'])->name('user.update');
 
+    Route::resource('restaurants.reviews', ReviewController::class)
+    ->only(['create'])
+    ->names(['create'=>'restaurants.reviews.create']);
+    Route::get('restaurants/{restaurant}/reviews',[ReviewController::class,'index'])->name('restaurants.reviews.index');
+    Route::get('restaurants/{restaurant}/reviews/{review}',[ReviewController::class,'show'])->name('restaurants.reviews.show');
+    Route::post('restaurants/{restaurant}/reviews', [ReviewController::class, 'store'])->middleware('auth')->name('restaurants.reviews.store');
+    Route::get('restaurants/{restaurant}/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('restaurants.reviews.edit');
+    Route::put('restaurants/{restaurant}/reviews/{review}',[ReviewController::class,'update'])->name('restaurants.reviews.update');
+    // Route::get('restaurants/{restaurant}/reviews/create',[ReviewController::class,'create'])->name('restaurants.reviews.create');
+    // Route::post('restaurants/{restaurant}/reviews',[ReviewController::class,'store'])->name('restaurants.reviews.store');
+    // Route::get('restaurants/{restaurant}/reviews/{review}/edit',[ReviewController::class,'edit'])->name('restaurants.reviews.edit');
+    
+    Route::delete('restaurants/{restaurant}/reviews/{review}',[ReviewController::class,'destroy'])->name('restaurants.reviews.destroy');
+
     // Route::group(['middleware' => ['auth', 'not.subscribed']], function () {
     // // Route::group(['middleware' => [NotSubscribed::class]], function () {
     //     Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
@@ -116,46 +131,3 @@ Route::group(['middleware' => ['auth', 'verified','subscribed']], function () {
         Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
         Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });
-
-
-
-// // 通常ユーザー向けルート
-// Route::group(['middleware' => ['auth', 'verified']], function () {
-//     Route::get('user/index', [UserController::class, 'index'])->name('user.index');
-//     Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
-//     Route::put('user/{user}', [UserController::class, 'update'])->name('user.update');
-
-//     Route::group(['middleware' => [NotSubscribed::class]], function () {
-//         Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('');
-//         Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
-//     });
-
-//     Route::group(['middleware' => [Subscribed::class]], function () {
-//         Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
-//         Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
-//         Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
-//         Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
-//     });
-// });
-
-
-
-// // 通常ユーザー向けルート
-// Route::group(['middleware' => ['auth', 'verified']], function () {
-//     Route::get('user/index', [UserController::class,'index'])->name('user.index');
-//     Route::get('user/{user}/edit', [UserController::class,'edit'])->name('user.edit');
-//     Route::put('user/{user}', [UserController::class,'update'])->name('user.update');
-
-//     Route::group(['middleware' => [NotSubscribed::class]]->function () {
-//         Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
-//         Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
-//     });
-    
-//     Route::group(['middleware' => [Subscribed::class]]->function () {
-//         Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
-//         Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
-//         Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
-//         Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
-//     });
-    
-// });

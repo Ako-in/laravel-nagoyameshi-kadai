@@ -7,6 +7,7 @@ use App\Models\Restaurant;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Admin;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 
 class RestaurantController extends Controller
@@ -16,22 +17,11 @@ class RestaurantController extends Controller
      */
     public function index(Request $request)
     {
-
-        // if (Auth::guard('admin')->check()) {
-        //     abort(403, 'This action is unauthorized.');
-        // }
-        // $user = $request->user(); // 1人のユーザーを取得
-        // $admin = $request->admin();
-        // if ($user !==$admin()) {
-        //     return redirect()->route('admin.home');
-        // }
-
         $user = $request->user(); // 現在のユーザーを取得
-    if ($user && $user->is_admin) {
-        // 管理者なら別の処理を行う
-        return redirect('/admin/home');
-    }
-
+        if ($user && $user->is_admin) {
+            // 管理者なら別の処理を行う
+            return redirect('/admin/home');
+        }
 
         $keyword = $request->input('keyword');
         $category_id = $request->input('category_id');
@@ -41,8 +31,10 @@ class RestaurantController extends Controller
 
         $sorts = [
             '掲載日が新しい順' => 'created_at desc',
-            '価格が安い順' => 'lowest_price asc'
+            '価格が安い順' => 'lowest_price asc',
+            '評価が高い順' => 'rating desc',
         ];
+        
         $sort_query = [];
         $sorted = "created_at desc";
 
@@ -67,6 +59,7 @@ class RestaurantController extends Controller
             // })
             ->sortable($sort_query)
             ->orderBy('created_at','desc')
+            // ->orderBy('rating','desc')
             ->paginate(15);
 
             $total = $restaurants->total();
@@ -77,6 +70,7 @@ class RestaurantController extends Controller
                 $query->where('categories.id',$category_id);
             })->sortable($sort_query)
               ->orderBy('created_at', 'desc')
+            //   ->orderBy('rating','desc')
               ->paginate(15);
     
             $total = $restaurants->total(); // paginate() から total を取得
@@ -85,6 +79,7 @@ class RestaurantController extends Controller
             $restaurants = Restaurant::where('lowest_price','<=',$price)
             ->sortable($sort_query)
             ->orderBy('created_at','desc')
+            // ->orderBy('rating','desc')
             ->paginate(15);
             $total = $restaurants->total();
         }else{
@@ -98,13 +93,17 @@ class RestaurantController extends Controller
     }
 
 
-    public function show(Request $request, $id){
+    public function show(Request $request, $id, Review $review){
         if (auth()->guard('admin')->check()) {
             // abort(403); // 403 Forbidden
             return redirect()->route('admin.login');
         }
-        $restaurant = Restaurant::find($id);
-        return view('restaurants.show',compact('restaurant'));
+        $restaurant = Restaurant::with('reviews')->find($id);
+        // レストランが存在しない場合の処理
+        if (!$restaurant) {
+            return redirect()->route('restaurants.index')->with('error', '店舗が見つかりません。');
+        }
+        return view('restaurants.show',compact('restaurant','review'));
     }
 
 }

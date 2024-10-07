@@ -75,4 +75,21 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->is_admin; // 例えば、is_admin フラグが存在する場合
     }
+
+    public function isSubscribed()
+    {
+        return $this->subscriptions()->exists(); // subscriptions() メソッドが null を返さないか確認
+    }
+    
+
+    // public function subscription()
+    // {
+    //     // Subscription モデルとのリレーションを定義 (例)
+    //     return $this->hasOne(Subscription::class);
+    // }
+
+
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
 }

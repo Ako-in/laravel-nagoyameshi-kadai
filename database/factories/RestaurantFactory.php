@@ -31,6 +31,7 @@ class RestaurantFactory extends Factory
             'closing_time' => '20:00:00',
             'seating_capacity' => 50,
             'image'=>'',
+            'id'=>1,
         ];
    }
 }
