@@ -36,11 +36,11 @@ class RestaurantController extends Controller
         ];
         
         $sort_query = [];
-        $sorted = "created_at desc";
+        $sorted = "created_at desc"; //デフォルトのソート
 
         if ($request->has('select_sort')) {
             $slices = explode(' ', $request->input('select_sort'));
-            $sort_query[$slices[0]] = $slices[1]->sortable('orderBy')->paginate(15);
+            $sort_query[$slices[0]] = $slices[1];
             $sorted = $request->input('select_sort');
         }
 
@@ -57,9 +57,8 @@ class RestaurantController extends Controller
             // ->orWhereHas('restaurants',function($query)use($keyword){
             //     $query->where('restaurants.name','like',"%{$keyword}%");
             // })
-            ->sortable($sort_query)
-            ->orderBy('created_at','desc')
-            // ->orderBy('rating','desc')
+            ->sortable()
+            ->orderByRaw($sorted)
             ->paginate(15);
 
             $total = $restaurants->total();
@@ -68,26 +67,28 @@ class RestaurantController extends Controller
 
             $restaurants = Restaurant::whereHas('categories', function($query) use ($category_id) {
                 $query->where('categories.id',$category_id);
-            })->sortable($sort_query)
-              ->orderBy('created_at', 'desc')
-            //   ->orderBy('rating','desc')
-              ->paginate(15);
+            });
+            // ->sortable()
+            //   ->orderByRaw($sorted)
+            //   ->paginate(15);
     
             $total = $restaurants->total(); // paginate() から total を取得
 
         }elseif($price !== null){
-            $restaurants = Restaurant::where('lowest_price','<=',$price)
-            ->sortable($sort_query)
-            ->orderBy('created_at','desc')
-            // ->orderBy('rating','desc')
-            ->paginate(15);
+            $restaurants = Restaurant::where('lowest_price','<=',$price);
+            // ->sortable()
+            // ->orderByRaw($sorted)
+            // ->paginate(15);
             $total = $restaurants->total();
-        }else{
-            $restaurants = Restaurant::sortable($sort_query)
-            ->orderBy('created_at','desc')
-            ->paginate(15);
-            $total = $restaurants->total();
+        // }elseif($score !== null){
+        //     $restaurants = Restaurant::sortable($sort_query);
+        //     $review = Review::where('score')
+        //     ->orderByRaw($sorted)
+        //     ->paginate(15);
 
+        }else{
+            $restaurants = Restaurant::orderBy('created_at','desc')->paginate(15);
+            $total = $restaurants->total();
         }
         return view('restaurants.index',compact('restaurants','keyword','total','category_id','price','sorts','sorted','sort_query','categories'));
     }
