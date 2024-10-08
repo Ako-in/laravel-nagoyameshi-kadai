@@ -14,10 +14,11 @@ class HomeController extends Controller
     public function index()
     {
         //$highly_rated_restaurantsはレビューの高い順に並べ替え必要！！！
-        $highly_rated_restaurants = Restaurant::orderBy('id','desc')->take(6)->get();
+        // $highly_rated_restaurants = Restaurant::orderBy('rating','desc')->take(6)->get();
+        $highly_rated_restaurants = Restaurant::withAvg('reviews', 'score')->orderBy('reviews_avg_score', 'desc')->take(6)->get();
         $categories = Category::all(); 
         //$new_restaurantsから最新の6件を取得する
-        $new_restaurants = Restaurant::orderBy('id','desc')->take(6)->get();
+        $new_restaurants = Restaurant::orderBy('created_at','desc')->take(6)->get();
         return view('home',compact('highly_rated_restaurants','categories','new_restaurants'));
     }
 

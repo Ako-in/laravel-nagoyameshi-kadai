@@ -32,6 +32,7 @@ class ReviewController extends Controller
             // $reviews = Restaurant::withAvg('reviews', 'score')->orderBy('reviews_avg_score', 'desc')->take(5)->get();
 
             $reviews = Review::where('restaurant_id',$restaurant->id)->orderBy('created_at','desc')->paginate(5);
+            $high = Review::where('restaurant_id',$restaurant->id)->orderBy('created_at','desc')->paginate(5);
             // $reviews = Review::orderBy('created_at','desc')->paginate(5);
         }else{
             $reviews = Review::where('restaurant_id',$restaurant->id)->orderBy('created_at','desc')->paginate(3);
