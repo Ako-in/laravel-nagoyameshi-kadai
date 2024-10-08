@@ -22,7 +22,12 @@ class ReviewPolicy
     public function update(User $user, Review $review)
     {
         // サブスクライブ済みか、もしくはレビューの所有者であれば編集を許可
-        // return $user->isSubscribed() || $user->id === $review->user_id;
+        return $user->isSubscribed() || $user->id === $review->user_id;
+        // if ($user->id !== $review->user_id) {
+        //     // 他のユーザーのレビューを削除しようとした場合は403を返す
+        //     abort(403, 'You are not authorized to delete this review.');
+        // }
+
         return $user->is_subscribed && $user->id === $review->user_id; // ユーザーが自身のレビューを更新できるか確認
     }
 

@@ -121,6 +121,9 @@ class ReviewController extends Controller
         if (!$user->subscribed('premium_plan')) {
             return redirect()->route('subscription.create');
         }
+        if ($review->user_id !== Auth::id()) {
+            return redirect()->route('restaurants.reviews.index', $restaurant)->with('error_message', '不正なアクセスです。');
+        }
         //レビュー編集ページ
         $user = Auth::user();
         $user_id = $user->id;
@@ -137,11 +140,12 @@ class ReviewController extends Controller
     public function update(Request $request, Restaurant $restaurant, Review $review)
     {
         $user = auth()->user();
+        // $this->authorize('update', $review);
         if (Auth::user()->is_admin) {
             return redirect()->route('admin.home');
         }
 
-        if (!$user->subscribed()) {
+        if (!$user->isSubscribed()) {
             abort(403, 'You are not subscribed.');
         }
         
@@ -153,12 +157,9 @@ class ReviewController extends Controller
 
         $review->score = $request->input('score');
         $review->content = $request->input('content');
-        // $reviews->save();
 
-        // $review->update($request->only([
-        //     'score', 'content' 
-        // ]));
         $review->update($request->only('score', 'content'));
+        Log::info($review);
         // $review->update($request->all());
         return redirect()->route('restaurants.reviews.index',$restaurant)->with('flash_message','レビューを編集しました。');
     }

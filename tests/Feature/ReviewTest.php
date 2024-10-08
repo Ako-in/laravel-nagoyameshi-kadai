@@ -335,8 +335,10 @@ class ReviewTest extends TestCase
         ]);
         
        // 編集リクエストを送信
-       $response = $this->get(route('restaurants.reviews.edit', [$restaurant->id, $review->id]));
-        $response->assertStatus(403);
+    //    $response = $this->get(route('restaurants.reviews.edit', [$restaurant->id, $review->id]));
+    //     $response->assertStatus(403);
+        $response = $this->actingAs($user)->get(route('restaurants.reviews.edit', [$restaurant->id, $review->id]));
+        $response->assertRedirect(route('restaurants.reviews.index', $restaurant));
     }
 
     public function test_login_subscribed_user_can_edit_own_review(): void
@@ -354,7 +356,7 @@ class ReviewTest extends TestCase
         
 
         // レビュー取得リクエスト
-        $response = $this->get(route('restaurants.reviews.edit', [$restaurant->id, $review->id]));
+        $response = $this->actingAs($user)->get(route('restaurants.reviews.edit', [$restaurant->id, $review->id]));
         // 200ステータスを期待
         $response->assertStatus(200);
 
@@ -446,26 +448,11 @@ class ReviewTest extends TestCase
             'score'=>5,
             'content'=>'更新',
         ];
-        // $user->newSubscription('premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN')->create('pm_card_visa'); // プランに加入
-        // $otherUser->newSubscription('premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN')->create('pm_card_visa'); // プランに加入
         $this->actingAs($user);//テストユーザーでログイン
        
         $response = $this->put(route('restaurants.reviews.update',[$restaurant->id, $review_old]), $review_new);
 
-        //     'restaurant' => $restaurant->id,
-        //     'review' => $review->id,
-        // ]),[
-        //     'score' => 5,
-        //     'content' => '編集', // 新しく追加
-        //  ]);
-        // $response = $this->get(route('restaurants.reviews.edit',[
-        //     'restaurant' => $restaurant->id,
-        //     'review' => $review->id,
-        // ]));
-        // $response->assertStatus(200);
-        // $response->assertStatus(403);
         $this->assertDatabaseMissing('reviews',$review_new);
-        // $response->assertRedirect(route('subscription.create'));
         $response->assertStatus(403);
     }
 
@@ -473,30 +460,72 @@ class ReviewTest extends TestCase
     // 4ログイン済みの有料会員は自身のレビューを更新できる
     {
         $user = User::factory()->create(['subscribed'=>true]);//テストユーザー作成
-        $this->actingAs($user);//テストユーザーでログイン
+        // $this->actingAs($user);//テストユーザーでログイン
         $user->newSubscription('premium_plan', 'price_1PzdMARwYcrGBVKOF9TPpaqN')->create('pm_card_visa'); // プランに加入
+        // $restaurant = Restaurant::factory()->create();
+        // // レビューを作成
+        // // レビューを作成
+        // $review_old = Review::factory()->create([
+        //     'restaurant_id' => $restaurant->id,
+        //     'user_id'=>$user->id,
+        //     // 'score'=>5,
+        //     // 'content'=>'テスト',
+        // ]);
+
+        // $review_new=[
+        //     // 'restaurant_id'=>$restaurant->id,
+        //     // 'user_id'=>$user->id,
+        //     'score'=>1,
+        //     'content'=>'更新',
+        // ];
+        
+        // $response = $this->actingAs($user)->put(route('restaurants.reviews.update', [
+        //     // 'restaurant' => $restaurant->id,
+        //     // 'review' => $review->id
+        //     $restaurant->id, $review_old->id]), $review_new
+        // );
+        // $this->assertDatabaseHas('reviews',$review_new);
+        
+        // $this->assertDatabaseHas('reviews', [
+        //     'id' => $review_old->id, 
+        //     'content' => 'テスト更',
+        //     'score' => 5,
+        // ]);
+        // $updatedReview = Review::find($review_old->id);
+        // dd($updatedReview);
+        // $this->assertDatabaseHas('reviews',$review_new);
+        // $this->assertDatabaseMissing('reviews', [
+        //     'id' => $review->id,
+        //     'content' => 'テスト',
+        //     'score' => 1,
+        // ]);
+
         $restaurant = Restaurant::factory()->create();
         // レビューを作成
         $review_old = Review::factory()->create([
             'restaurant_id' => $restaurant->id,
-            'user_id' => $user->id,
+            'user_id'=>$user->id,
+            'score'=>5,
+            'content'=>'テスト',
         ]);
-        $review_new = [
-            'content' => 'テスト更新', // ここがテストで期待する内容
-            'score' => 5,
+
+        $review_new=[
+            'restaurant_id'=>$restaurant->id,
+            'user_id'=>$user->id,
+            'score'=>3,
+            'content'=>'更新',
         ];
-        
-        $response = $this->put(route('restaurants.reviews.update', [
-            'restaurant' => $restaurant->id,
-            'review' => $review_old->id
-        ]), $review_new);
-        $this->assertDatabaseHas('reviews', [
-            'id' => $review_old->id, 
-            'content' => 'テスト更新',
-            'score' => 5,
-        ]);
+        // $this->actingAs($user);//テストユーザーでログイン
+       
+        $response = $this->actingAs($user)->put(route('restaurants.reviews.update',[$restaurant->id, $review_old->id]),$review_new);
+
         // $response->assertRedirect(route('restaurants.reviews.index',$restaurant->id));
-        $response->assertStatus(200); // 更新が成功しているか確認
+        $response->assertStatus(302); // 更新が成功しているか確認
+        $this->assertDatabaseHas('reviews', [
+            'id' => $review_old->id,
+            'score' => 3,
+            'content' => '更新',
+        ]);
     }
 
     public function test_login_aminduser_cannot_update_to_review(): void

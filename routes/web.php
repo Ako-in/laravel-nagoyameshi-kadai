@@ -97,7 +97,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('restaurants/{restaurant}/reviews/{review}',[ReviewController::class,'show'])->name('restaurants.reviews.show');
     Route::post('restaurants/{restaurant}/reviews', [ReviewController::class, 'store'])->middleware('auth')->name('restaurants.reviews.store');
     Route::get('restaurants/{restaurant}/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('restaurants.reviews.edit');
-    Route::put('restaurants/{restaurant}/reviews/{review}',[ReviewController::class,'update'])->name('restaurants.reviews.update');
+    Route::match(['put', 'patch'],'restaurants/{restaurant}/reviews/{review}',[ReviewController::class,'update'])->name('restaurants.reviews.update');
     // Route::get('restaurants/{restaurant}/reviews/create',[ReviewController::class,'create'])->name('restaurants.reviews.create');
     // Route::post('restaurants/{restaurant}/reviews',[ReviewController::class,'store'])->name('restaurants.reviews.store');
     // Route::get('restaurants/{restaurant}/reviews/{review}/edit',[ReviewController::class,'edit'])->name('restaurants.reviews.edit');
