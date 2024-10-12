@@ -203,7 +203,8 @@ class ReservationTest extends TestCase
         $reservation = Reservation::factory()->create([
             'restaurant_id' => $restaurant->id,
             'user_id'=>$user->id,
-            'reserved_datetime'=>'2023-12-01 00:00:00',
+            // 'reserved_datetime'=>'2023-12-01 00:00:00',
+
             'number_of_people'=>50,
         ]);
         
@@ -216,14 +217,18 @@ class ReservationTest extends TestCase
             'reserved_datetime'=>'2023-12-01 00:00:00',
             'number_of_people'=>50,
         ]);
-        $response->assertStatus(403); // アクセスが禁止されていることを確認
+        // $response->assertStatus(403); // アクセスが禁止されていることを確認
         $this->assertDatabaseMissing('reservations',[
             'restaurant_id' => $restaurant->id,
             'user_id'=>$user->id,
-            'reserved_datetime'=>'2023-12-01'. '00:00:00',
+            'reserved_datetime'=>'2023-12-01 00:00:00',
+            // 'reservation_date' =>'2023-12-01',
+            // 'reservation_time' =>'00:00:00',
             'number_of_people'=>50,
         ]);
         // $response->assertStatus(403);
+        $response->assertRedirect(route('subscription.create'));
+        
     }
 
     public function test_subecribed_login_user_can_access_to_reservation_store(): void
@@ -240,11 +245,7 @@ class ReservationTest extends TestCase
             // 'user_id' => $user->id,
         ];
         // レビューを投稿
-        $response = $this->actingAs($user)->post(route('restaurants.reservations.store', $restaurant), $reservationData);
-        // // レスポンスをログに記録
-        // Log::info('Response:', ['response' => $response->json()]);
-        // Log::info('User:', ['user' => $user]);
-        // Log::info('Can Create Reservation:', ['can_create' => $user->can('create', Reservation::class)]);       
+        $response = $this->actingAs($user)->post(route('restaurants.reservations.store', $restaurant), $reservationData);  
 
         // データベースにレビューが存在することを確認
         $this->assertDatabaseHas('reservations',[
@@ -255,7 +256,7 @@ class ReservationTest extends TestCase
         ]);
         // $this->assertDatabaseHas('reservations',$reservationData);
         // リダイレクト
-        $response->assertRedirect(route('reservation.index', $restaurant->id));
+        $response->assertRedirect(route('reservation.index'));
     }
 
     public function test_login_adminuser_cannot_access_to_reservation_store(): void
@@ -274,18 +275,11 @@ class ReservationTest extends TestCase
             'reserved_datetime'=>'2023-12-01 00:00:00',
             'number_of_people'=>50,
         ];
-        // 予約を作成
-        // $reservationData= [
-        //     'reserved_datetime' => $reservationData['reserved_datetime'],
-        //     'number_of_people' => $reservationData['number_of_people'],
-        //     'restaurant_id' => $restaurant->id,
-        //     'user_id' => $admin->id,
-        // ];
-        
+      
         $response = $this->post(route('restaurants.reservations.store',$restaurant->id), $reservationData);
         $this->assertDatabaseMissing('reservations',$reservationData);
-        // $response->assertRedirect(route('admin.home'));
-        $response->assertStatus(403);
+        $response->assertRedirect(route('admin.home'));
+        // $response->assertStatus(403);
     }
 
 

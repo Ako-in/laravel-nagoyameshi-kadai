@@ -10,6 +10,7 @@ use App\Models\Admin;
 use App\Models\Review;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -65,9 +66,11 @@ class ReservationController extends Controller
         if (Auth::user()->is_admin) {
             return redirect()->route('admin.home');
         }
+        // if (!$user->is_subscribed) {
+        //     return redirect()->route('subscription.create');
+        // }
         // レビュー投稿ページ
         $reservations = $restaurant->reservations;
-        
         return view('restaurants.reservations.create',compact('reservations','restaurant'));
     }
 
@@ -79,10 +82,11 @@ class ReservationController extends Controller
         if (Auth::user()->is_admin) {
             return redirect()->route('admin.home');
         }
-
-        if (!auth()->user()->subscribed) {
-            abort(403);//サブスクライブされていないユーザーはアクセス拒否
+        if(!Auth::user()->subscribed('premium_plan')){
+        // if (!auth()->user()->subscribed) {
+            return redirect()->route('subscription.create');
         } 
+
         //予約機能
         //バリデーション設定
         $request->validate([
@@ -91,48 +95,19 @@ class ReservationController extends Controller
            'number_of_people' =>'required|numeric|between:1,50',
         ]);
 
-        // 'reserved_datetime' を設定
-        $reservedDatetime = $request->reservation_date . ' ' . $request->reservation_time;
-         
         $reservation = new Reservation();
-        $reservation->reserved_datetime = $reservedDatetime;
+        $reservation->reserved_datetime = $request->reservation_date . ' ' . $request->reservation_time;
         $reservation->number_of_people = $request->input('number_of_people');
         $reservation->restaurant_id = $restaurant->id;
         $reservation->user_id = $request->user()->id; // 認証されたユーザーのIDを取得
         $reservation->save();
 
         // レビューが正常に保存された後の処理
-        return redirect()->route('restaurants.reservations.index', $restaurant->id)
+        return redirect()->route('reservation.index')
         ->with('flash_message', '予約が完了しました。');
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     //
-    // }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    // public function edit(string $id)
-    // {
-    //     //
-    // }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, string $id)
-    // {
-    //     //
-    // }
-
-    /**
-     * Remove the specified resource from storage.
-     */
 
     public function destroy(Restaurant $restaurant, $reservationId)
     {
@@ -144,14 +119,15 @@ class ReservationController extends Controller
             return to_route('reservation.index',['restaurant' => $restaurant->id])->with('error_message','不正なアクセスです。');
         }
         // 予約削除機能: IDに基づいて予約を取得
-        // $reservation = Reservation::find($reservationId)
+        $reservation = Reservation::find($reservationId);
         // ->where('restaurant_id', $restaurant->id)
         // ->firstOrFail();
-        $reservation = Reservation::where('id', $reservationId)->where('restaurant_id', $restaurant->id)->first();
+        // $reservation = Reservation::where('id', $reservationId)->where('restaurant_id', $restaurant->id)->first();
         //予約削除機能
         // Log::info($reservation);
         $reservation->delete();
         // $response->assertRedirect(route('reservations.index'));
-        return redirect()->route('reservation.index',['restaurant' => $restaurant->id])->with('flash_message','予約をキャンセルしました。');
+        return to_route('reservation.index')
+        ->with('flash_message','予約をキャンセルしました。');
     }
 }

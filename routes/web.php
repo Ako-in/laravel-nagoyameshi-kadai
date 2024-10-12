@@ -107,7 +107,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('reservations',[ReservationController::class,'index'])->name('reservation.index');
     Route::get('restaurants/{restaurant}/reservations/create',[ReservationController::class,'create'])->name('restaurants.reservations.create');
-    Route::post('restaurants/{restaurant}/reservations', [ReservationController::class, 'store'])->name('restaurants.reservations.store')->middleware('can:create,restaurant');
+    Route::post('restaurants/{restaurant}/reservations', [ReservationController::class, 'store'])->name('restaurants.reservations.store');
+    // Route::post('restaurants/{restaurant}/reservations', [ReservationController::class, 'store'])->name('restaurants.reservations.store')->middleware('can:create,restaurant');
     // Route::delete('restaurants/reservations/{resercation}',[ReservationController::class,'destroy'])->name('restaurants.reservations.destroy');
     Route::delete('reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservation.destroy');
 
