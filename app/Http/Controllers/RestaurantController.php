@@ -26,6 +26,7 @@ class RestaurantController extends Controller
         $keyword = $request->input('keyword');
         $category_id = $request->input('category_id');
         $price = $request->input('price');
+        $score = $request->input('score');
 
         $categories = Category::all();
 
@@ -75,19 +76,14 @@ class RestaurantController extends Controller
             $total = $restaurants->total(); // paginate() から total を取得
 
         }elseif($price !== null){
-            $restaurants = Restaurant::where('lowest_price','<=',$price);
+            $restaurants = Restaurant::where('lowest_price','<=',$price)
             // ->sortable()
-            // ->orderByRaw($sorted)
-            // ->paginate(15);
+            ->orderByRaw($sorted)
+            ->paginate(15);
             $total = $restaurants->total();
-        // }elseif($score !== null){
-        //     $restaurants = Restaurant::sortable($sort_query);
-        //     $review = Review::where('score')
-        //     ->orderByRaw($sorted)
-        //     ->paginate(15);
 
         }else{
-            $restaurants = Restaurant::orderBy('created_at','desc')->paginate(15);
+            $restaurants = Restaurant::orderByRaw($sorted)->paginate(15);
             $total = $restaurants->total();
         }
         return view('restaurants.index',compact('restaurants','keyword','total','category_id','price','sorts','sorted','sort_query','categories'));

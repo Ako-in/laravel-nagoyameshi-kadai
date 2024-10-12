@@ -12,14 +12,7 @@
                     </ol>
                 </nav>
 
-                @if ($restaurant)
-                    <h1 class="mb-2 text-center">{{ $restaurant->name }}</h1>
-                @else
-                    <p>店舗情報が見つかりません。</p>
-                @endif
-
-
-                {{-- <h1 class="mb-2 text-center">{{ $restaurant->name }}</h1> --}}
+                <h1 class="mb-2 text-center">{{ $restaurant->name }}</h1>
                 <p class="text-center">
                     <span class="nagoyameshi-star-rating me-1" data-rate="{{ round($restaurant->reviews->avg('score') * 2) / 2 }}"></span>
                     {{ number_format(round($restaurant->reviews->avg('score'), 2), 2) }}（{{ $restaurant->reviews->count() }}件）
@@ -36,10 +29,10 @@
                         <a class="nav-link active text-white nagoyameshi-bg" aria-current="page" href="{{ route('restaurants.show', $restaurant) }}">トップ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link link-dark" href="#">予約</a>
+                        <a class="nav-link link-dark" href="{{ route('restaurants.reservations.create', $restaurant) }}">予約</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link link-dark" href="{{ route('restaurants.reviews.index', $restaurant->id) }}">レビュー</a>
+                        <a class="nav-link link-dark" href="{{ route('restaurants.reviews.index', $restaurant) }}">レビュー</a>
                     </li>
                 </ul>
 

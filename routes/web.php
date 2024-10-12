@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,9 +102,16 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Route::get('restaurants/{restaurant}/reviews/create',[ReviewController::class,'create'])->name('restaurants.reviews.create');
     // Route::post('restaurants/{restaurant}/reviews',[ReviewController::class,'store'])->name('restaurants.reviews.store');
     // Route::get('restaurants/{restaurant}/reviews/{review}/edit',[ReviewController::class,'edit'])->name('restaurants.reviews.edit');
-    
     Route::delete('restaurants/{restaurant}/reviews/{review}',[ReviewController::class,'destroy'])->name('restaurants.reviews.destroy');
 
+
+    Route::get('reservations',[ReservationController::class,'index'])->name('reservation.index');
+    Route::get('restaurants/{restaurant}/reservations/create',[ReservationController::class,'create'])->name('restaurants.reservations.create');
+    Route::post('restaurants/{restaurant}/reservations', [ReservationController::class, 'store'])->name('restaurants.reservations.store')->middleware('can:create,restaurant');
+    // Route::delete('restaurants/reservations/{resercation}',[ReservationController::class,'destroy'])->name('restaurants.reservations.destroy');
+    Route::delete('reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservation.destroy');
+
+    // Route::get('reservation/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel');
     // Route::group(['middleware' => ['auth', 'not.subscribed']], function () {
     // // Route::group(['middleware' => [NotSubscribed::class]], function () {
     //     Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
