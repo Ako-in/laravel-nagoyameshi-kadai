@@ -13,7 +13,7 @@ use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReservationController;
-
+use App\Http\Controllers\FavoriteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -112,19 +112,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     // Route::delete('restaurants/reservations/{resercation}',[ReservationController::class,'destroy'])->name('restaurants.reservations.destroy');
     Route::delete('reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservation.destroy');
 
-    // Route::get('reservation/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel');
-    // Route::group(['middleware' => ['auth', 'not.subscribed']], function () {
-    // // Route::group(['middleware' => [NotSubscribed::class]], function () {
-    //     Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
-    //     Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
-    // });
-    // Route::group(['middleware' => ['auth', 'subscribed']], function () {
-    // // Route::group(['middleware' => [Subscribed::class]], function () {
-    //     Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
-    //     Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
-    //     Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
-    //     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
-    // });
+    Route::get('favorites',[FavoriteController::class,'index'])->name('favorites.index');
+    Route::post('favorites/{restaurant_id}',[FavoriteController::class,'store'])->name('favorites.store');
+    Route::delete('favorites/{restaurant_id}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+
 });
 
 Route::group(['middleware' => ['auth','verified','not.subscribed']], function () {

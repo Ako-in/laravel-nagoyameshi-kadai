@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Cashier;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 // use App\Models\Cashier\User;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -96,4 +98,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reservations(){
         return $this->hasMany(Reservation::class);
     }
+
+    //Users:Restaurant多対多 中間テーブル
+    public function users(){
+        return $this->belongsToMany(User::class);
+    }
+    public function favorite_restaurants(): BelongsToMany
+    {
+        return $this->belongsToMany(Restaurant::class);
+    }
+
+
+
 }
