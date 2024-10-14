@@ -5,8 +5,8 @@ use App\Http\Controllers\Admin;
 // use App\Http\Controllers\Admin\UserController;
 // use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\CompanyController;
-use App\Http\Controllers\Admin\TermController;
+use App\Http\Controllers\Admin\CompanyController as AdminCompanyController; // Admin用のエイリアス
+use App\Http\Controllers\Admin\TermController as AdminTermController;;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantController;
@@ -14,6 +14,9 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\CompanyController as UserCompanyController; // 通常用のエイリアス
+use App\Http\Controllers\TermController as UserTermController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -63,13 +66,13 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     // Route::resource('categories',Admin\CategoryController::class);
 
     // Route::resource('company', Admin\CompanyController::class)->only(['index', 'edit', 'update']);
-    Route::get('company/index', [Admin\CompanyController::class, 'index'])->name('company.index');
-    Route::patch('company/{company}', [Admin\CompanyController::class, 'update'])->name('company.update');
-    Route::get('company/{company}/edit', [Admin\CompanyController::class, 'edit'])->name('company.edit');
+    Route::get('company/index', [AdminCompanyController::class, 'index'])->name('company.index');
+    Route::patch('company/{company}', [AdminCompanyController::class, 'update'])->name('company.update');
+    Route::get('company/{company}/edit', [AdminCompanyController::class, 'edit'])->name('company.edit');
 
-    Route::get('terms/index',[Admin\TermController::class,'index'])->name('terms.index');
-    Route::get('terms/{term}/edit',[Admin\TermController::class,'edit'])->name('terms.edit');
-    Route::put('terms/{term}',[Admin\TermController::class,'update'])->name('terms.update');
+    Route::get('terms/index',[AdminTermController::class,'index'])->name('terms.index');
+    Route::get('terms/{term}/edit',[AdminTermController::class,'edit'])->name('terms.edit');
+    Route::put('terms/{term}',[AdminTermController::class,'update'])->name('terms.update');
 });
 
 // Route::group(['middleware' => 'guest:admin'], function () {
@@ -84,6 +87,9 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
 // });
 Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
 Route::get('restaurants/{restaurant}',[RestaurantController::class,'show'])->name('restaurants.show');
+
+Route::get('company',[UserCompanyController::class,'index'])->name('company.index');
+Route::get('terms',[UserTermController::class,'index'])->name('terms.index');
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');

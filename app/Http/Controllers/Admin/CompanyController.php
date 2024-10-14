@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Company;
+use App\Models\Company\Admin;
 use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
@@ -14,7 +14,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $company = Company::get()->last();;
+        $company = Company::get()->last();
         return view('admin.company.index',compact('company'));
     }
 
