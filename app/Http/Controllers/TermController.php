@@ -15,12 +15,17 @@ class TermController extends Controller
      */
     public function index(Request $request)
     {
-        // if (auth()->user()->is_admin) {
-        //     return redirect()->route('admin.login');
-        // }
 
-        $term= Term::latest()->first();
-        return view('terms.index',compact('term'));
+        // ログインしているユーザーのis_adminをチェック
+        if (auth()->check() && auth()->user()->is_admin == 1) {
+            abort(403);
+            // return redirect()->route('admin.login');  // リダイレクト
+        }
+
+        if (auth()->check() && auth()->user()->is_admin == 0) {
+            $term= Term::latest()->first();
+            return view('terms.index',compact('term'));
+        }
     }
 
     // /**

@@ -67,6 +67,7 @@ class TermTest extends TestCase
         $this->actingAs($admin,'admin');//テストユーザーでログイン
         $term = Term::factory()->create();
         $response = $this->actingAs($admin,'admin')->get(route('terms.index'));
+        // dd($response->headers->get('Location'));
         // $response->assertRedirect(route('admin.login'));
         $response->assertStatus(403);
     }

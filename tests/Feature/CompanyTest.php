@@ -65,7 +65,7 @@ class CompanyTest extends TestCase
         $company = Company::factory()->create();
         $this->actingAs($admin,'admin');//テストユーザーでログイン
         $response = $this->actingAs($admin,'admin')->get(route('company.index',$company));
-        $response->assertRedirect(route('admin.login'));
-        // $response->assertStatus(403);
+        // $response->assertRedirect(route('admin.login'));
+        $response->assertStatus(403);
     }
 }
