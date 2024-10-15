@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\RegularHoliday;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class RestaurantController extends Controller
 {
@@ -71,17 +72,27 @@ class RestaurantController extends Controller
         $restaurant->opening_time = $request->input('opening_time');
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
-        
+        // dd('111');
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
         if ($request->hasFile('image')) {
             // // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
             // $image = $request->file('image')->store('public/restaurants');
-            $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
-            $file = $request->file('image')->move('storage/restaurants');
+            // $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
+            // // dd('222');
+            // $file = $request->file('image')->store('storage/restaurants');
+            // dd('333');
+            // $image = $request->file('image')->store('public/restaurants');
+            // $restaurant->image = basename($image);
+            $image = $request->file('image')->store('public/restaurants');
+            // dd($image);
+            $restaurant->image = basename($image);
         }else{
             $restaurant->image = '';
         }
+        // dd('444');
         $restaurant->save();
+        // dd('555');
+
 
         // $categories = $restaurant->category_id;
         $category_ids = array_filter($request->input('category_ids',[]));
@@ -133,8 +144,10 @@ class RestaurantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update($id,Request $request)
     {
+        // dd('111');
+        // Log::info('111111');
         //バリデーション設定
         $request->validate([
             'category_ids' => 'required|array|max:3',  // カテゴリのバリデーション
@@ -149,12 +162,26 @@ class RestaurantController extends Controller
         $restaurant->opening_time = $request->input('opening_time');
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
-       
+        // dd('111');
         if($request->hasFile('image')){
-            $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
-            $file = $request->file('image')->move('storage/restaurants');
+            // // 画像を保存してそのパスを取得
+            // $imagePath = $request->file('image')->store('public/restaurants');
+            // // データベースに保存するパスを修正
+            // $restaurant->image = str_replace('public/', 'storage/restaurants', $imagePath);
+            $image = $request->file('image')->store('public/restaurants');
+            // dd($image);
+            $restaurant->image = basename($image);
+            
+            // dd($restaurant->image); // 保存されたパスを確認する
+
+
+            // $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
+            // $file = $request->file('image')->store('storage/restaurants');
+            // dd('111');
+            // Log::info('222222');
         }
         $restaurant->save();
+        // Log::info('333333');
         $category_ids = array_filter($request->input('category_ids'));
         $restaurant->categories()->sync($category_ids);
         
