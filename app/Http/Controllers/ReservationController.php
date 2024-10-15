@@ -35,7 +35,7 @@ class ReservationController extends Controller
             // ->orderBy('reserved_datetime', 'desc')
             // ->paginate(15);
             $reservations = Reservation::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
+            ->orderBy('reserved_datetime', 'desc')
             ->take(15)
             ->get();
         }
@@ -46,11 +46,11 @@ class ReservationController extends Controller
         //         ->paginate(15);
         // }
         $reservations = Reservation::where('user_id', Auth::id())
-        ->orderBy('created_at', 'desc')
+        ->orderBy('reserved_datetime', 'desc')
         ->paginate(15);
 
         // 全てのレストラン情報を取得
-        $restaurants = Restaurant::all();
+        // $restaurants = Restaurant::all();
         // ログインユーザーの予約を取得
         // $reservations = $request->user()->reservations; // もしユーザーに関連付けられた予約があるなら
         // $reservations = $request->user()->reservations ?? []; // 予約がない場合は空の配列を返す

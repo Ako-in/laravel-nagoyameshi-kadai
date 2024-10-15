@@ -60,4 +60,8 @@ class Restaurant extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function popularSortable($query, $direction) {
+        return $query->withCount('reservations')->orderBy('reservations_count', $direction);
+    }
+
 }

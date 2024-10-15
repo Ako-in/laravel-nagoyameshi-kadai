@@ -63,6 +63,9 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::put('categories/{category}',[Admin\CategoryController::class,'update'])->name('categories.update');
     Route::get('categories/{category}/edit',[Admin\CategoryController::class,'edit'])->name('categories.edit');
     
+
+    //機能追加
+    Route::get('restaurants/review/{restaurant}',[Admin\ReviewController::class,'index'])->name('restaurants.review');
     // Route::resource('categories',Admin\CategoryController::class);
 
     // Route::resource('company', Admin\CompanyController::class)->only(['index', 'edit', 'update']);
