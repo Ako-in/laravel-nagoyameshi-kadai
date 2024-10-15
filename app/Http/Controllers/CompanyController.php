@@ -16,12 +16,20 @@ class CompanyController extends Controller
     public function index()
     {
         $user = auth()->user();
-        if (auth()->user()->is_admin) {
-            return redirect()->route('admin.login');
+        // if (auth()->user()->is_admin) {
+        //     return redirect()->route('admin.login');
+        // }
+
+        // ログインしているユーザーのis_adminをチェック
+        if (auth()->check() && auth()->user()->is_admin == 1) {
+            abort(403);
+            // return redirect()->route('admin.login');  // リダイレクト
         }
 
-        $company = Company::get()->last();
+        if (auth()->check() && auth()->user()->is_admin == 0) {
+            $company = Company::get()->last();
             return view('company.index',compact('company'));
+        }
     }
 
     // /**

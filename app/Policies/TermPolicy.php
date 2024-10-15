@@ -15,10 +15,5 @@ class TermPolicy
     // {
     //     //
     // }
-    
-    public function viewAny(Admin $admin)
-    {
-        // 管理者がアクセスできない場合にfalseを返す
-        return $admin->role !== 'admin'; // ここでroleの判定を行う
-    }
+
 }
