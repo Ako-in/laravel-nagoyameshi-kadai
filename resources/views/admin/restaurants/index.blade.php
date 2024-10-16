@@ -37,18 +37,6 @@
                         </ul>
                     </div>
                 @endif
-                
-
-                {{-- @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif --}}
-
 
                 <div>
                     <p class="mb-0">計{{ number_format($total) }}件</p>
