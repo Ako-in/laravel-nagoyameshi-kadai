@@ -59,7 +59,7 @@ class RestaurantController extends Controller
             // ->orWhereHas('restaurants',function($query)use($keyword){
             //     $query->where('restaurants.name','like',"%{$keyword}%");
             // })
-            ->sortable()
+            // ->sortable()
             ->orderByRaw($sorted)
             ->paginate(15);
 
@@ -69,10 +69,10 @@ class RestaurantController extends Controller
 
             $restaurants = Restaurant::whereHas('categories', function($query) use ($category_id) {
                 $query->where('categories.id',$category_id);
-            });
+            })
             // ->sortable()
-            //   ->orderByRaw($sorted)
-            //   ->paginate(15);
+            ->orderByRaw($sorted)
+            ->paginate(15);
     
             $total = $restaurants->total(); // paginate() から total を取得
 
@@ -81,7 +81,7 @@ class RestaurantController extends Controller
             // ->sortable()
             ->orderByRaw($sorted)
             ->paginate(15);
-            $total = $restaurants->total();
+            // $total = $restaurants->total();
 
         }else{
             $restaurants = Restaurant::orderByRaw($sorted)->paginate(15);

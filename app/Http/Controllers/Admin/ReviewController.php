@@ -10,62 +10,62 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $keyword = $request->input('keyword');
-        If($keyword !== null){
-            $reviews = Restaurant::whereHas('reviews',function($query)use($keyword){
-            $query->where('reivews','like',"%{$keyword}%");
-        });
-        $total = $reviews->total();
-        return view('admin.restaurants.review',compact('restaurants','keyword','total','reviews'));
-    }
+    // public function index(Request $request)
+    // {
+    //     $keyword = $request->input('keyword');
+    //     If($keyword !== null){
+    //         $reviews = Restaurant::whereHas('reviews',function($query)use($keyword){
+    //         $query->where('reivews','like',"%{$keyword}%");
+    //     });
+    //     $total = $reviews->total();
+    //     return view('admin.restaurants.review',compact('restaurants','keyword','total','reviews'));
+    // }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+    // public function create()
+    // {
+    //     //
+    // }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    // public function store(Request $request)
+    // {
+    //     //
+    // }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+    // /**
+    //  * Display the specified resource.
+    //  */
+    // public function show(string $id)
+    // {
+    //     //
+    // }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  */
+    // public function edit(string $id)
+    // {
+    //     //
+    // }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
+    // public function update(Request $request, string $id)
+    // {
+    //     //
+    // }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    // /**
+    //  * Remove the specified resource from storage.
+    //  */
+    // public function destroy(string $id)
+    // {
+    //     //
+    // }
 }
