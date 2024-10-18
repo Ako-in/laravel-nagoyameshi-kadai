@@ -83,7 +83,8 @@ class RestaurantController extends Controller
             // dd('333');
             // $image = $request->file('image')->store('public/restaurants');
             // $restaurant->image = basename($image);
-            $image = $request->file('image')->store('public/restaurants');
+            // $image = $request->file('image')->store('public/restaurants');
+            $image = $request->file('image')->store('restaurants', 's3');
             // dd($image);
             $restaurant->image = basename($image);
         }else{
@@ -168,7 +169,8 @@ class RestaurantController extends Controller
             // $imagePath = $request->file('image')->store('public/restaurants');
             // // データベースに保存するパスを修正
             // $restaurant->image = str_replace('public/', 'storage/restaurants', $imagePath);
-            $image = $request->file('image')->store('public/restaurants');
+            // $image = $request->file('image')->store('public/restaurants');
+            $image = $request->file('image')->store('restaurants', 's3');
             // dd($image);
             $restaurant->image = basename($image);
             
