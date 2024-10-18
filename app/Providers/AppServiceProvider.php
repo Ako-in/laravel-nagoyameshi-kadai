@@ -10,6 +10,8 @@ use Laravel\Cashier\Cashier;  // Cashier クラスのインポート
 use App\Models\User;  // User モデルのインポート
 use Laravel\Cashier\Billable;
 
+use Aws\S3\S3Client;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -35,4 +37,5 @@ class AppServiceProvider extends ServiceProvider
         Cashier::useCustomerModel(User::class);
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
     }
+    
 }

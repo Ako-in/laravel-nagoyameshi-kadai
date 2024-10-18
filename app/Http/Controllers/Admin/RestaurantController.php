@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
+use Aws\S3\S3Client;
+
 class RestaurantController extends Controller
 {
     /**
@@ -76,7 +78,8 @@ class RestaurantController extends Controller
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
         if ($request->hasFile('image')) {
             $image = $request->file('image')->store('restaurants', 's3');
-            $restaurant->image = basename($image);
+            // $restaurant->image = basename($image);
+            $restaurant->image = Storage::disk('s3')->url($image);
         }else{
             $restaurant->image = '';
         }
@@ -155,7 +158,8 @@ class RestaurantController extends Controller
         if($request->hasFile('image')){
             // // 画像を保存してそのパスを取得
             $image = $request->file('image')->store('restaurants', 's3');
-            $restaurant->image = basename($image);
+            // $restaurant->image = basename($image);
+            $restaurant->image = Storage::disk('s3')->url($image);
 
         }
         $restaurant->save();
