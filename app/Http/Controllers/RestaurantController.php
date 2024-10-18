@@ -104,7 +104,10 @@ class RestaurantController extends Controller
         if (!$restaurant) {
             return redirect()->route('restaurants.index')->with('error', '店舗が見つかりません。');
         }
-        return view('restaurants.show',compact('restaurant','review'));
+        $categories = $restaurant->categories; // Restaurantモデルにcategoriesリレーションがあると仮定
+
+        return view('restaurants.show', compact('restaurant', 'categories'));
+        // return view('restaurants.show',compact('restaurant','category_id'));
     }
 
 }

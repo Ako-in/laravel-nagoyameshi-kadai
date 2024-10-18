@@ -42,12 +42,12 @@ class HomeController extends Controller
     // /**
     //  * Display the specified resource.
     //  */
-    public function show(Restaurant $restaurant, Category $category)
-    {
-        // $categories = CategoryRestaurant::all();
-        $categories = Category::with('cateogries')->find($id);
-        return view('restaurants/show',compact('categories'));
-    }
+    // public function show(Restaurant $restaurant, Category $category)
+    // {
+    //     // $categories = CategoryRestaurant::all();
+    //     $categories = Category::with('cateogries')->find($id);
+    //     return view('restaurants/show',compact('categories'));
+    // }
 
     // /**
     //  * Show the form for editing the specified resource.

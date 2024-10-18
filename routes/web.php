@@ -63,9 +63,6 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::put('categories/{category}',[Admin\CategoryController::class,'update'])->name('categories.update');
     Route::get('categories/{category}/edit',[Admin\CategoryController::class,'edit'])->name('categories.edit');
     
-
-    //機能追加
-    Route::get('restaurants/review/{restaurant}',[Admin\ReviewController::class,'index'])->name('restaurants.review');
     // Route::resource('categories',Admin\CategoryController::class);
 
     // Route::resource('company', Admin\CompanyController::class)->only(['index', 'edit', 'update']);
@@ -88,7 +85,9 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
 //     // })->middleware('auth')->name('home');
 
 // });
-Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
+// Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
+Route::get('restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
+
 Route::get('restaurants/{restaurant}',[RestaurantController::class,'show'])->name('restaurants.show');
 
 Route::get('company',[UserCompanyController::class,'index'])->name('company.index');
@@ -140,3 +139,5 @@ Route::group(['middleware' => ['auth', 'verified','subscribed']], function () {
         Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
         Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });
+
+
