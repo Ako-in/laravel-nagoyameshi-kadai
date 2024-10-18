@@ -52,7 +52,9 @@
                             {{-- <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" class="w-100"> --}}
                             {{-- <img src="{{ asset($restaurant->image) }}" alt="{{ $restaurant->name }}"class="w-100"> --}}
                             {{-- <img src="{{ Storage::url($restaurant->image) }}" alt="{{ $restaurant->name }}"class="w-100"> --}}
-                            <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" alt="{{ $restaurant->name }}" class="w-100">
+                            {{-- <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" alt="{{ $restaurant->name }}" class="w-100"> --}}
+                            <img src="{{ Storage::disk('s3')->url('restaurants/' . $restaurant->image) }}" alt="Restaurant Image" class="w-100">
+
                             @else
                             <img src="{{ asset('/images/no_image.jpg') }}" class="w-100">
                         @endif

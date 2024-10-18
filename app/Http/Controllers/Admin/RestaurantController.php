@@ -75,16 +75,7 @@ class RestaurantController extends Controller
         // dd('111');
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
         if ($request->hasFile('image')) {
-            // // アップロードされたファイル（name="image"）をstorage/app/public/restaurantsフォルダに保存し、戻り値（ファイルパス）を変数$image_pathに代入する
-            // $image = $request->file('image')->store('public/restaurants');
-            // $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
-            // // dd('222');
-            // $file = $request->file('image')->store('storage/restaurants');
-            // dd('333');
-            // $image = $request->file('image')->store('public/restaurants');
-            // $restaurant->image = basename($image);
-            $image = $request->file('image')->store('public/restaurants');
-            // dd($image);
+            $image = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = basename($image);
         }else{
             $restaurant->image = '';
@@ -162,7 +153,8 @@ class RestaurantController extends Controller
         $restaurant->seating_capacity = $request->input('seating_capacity');
 
         if($request->hasFile('image')){
-            $image = $request->file('image')->store('public/restaurants');
+            // // 画像を保存してそのパスを取得
+            $image = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = basename($image);
 
         }

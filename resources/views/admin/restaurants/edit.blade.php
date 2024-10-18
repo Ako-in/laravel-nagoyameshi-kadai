@@ -53,7 +53,11 @@
                     @if ($restaurant->image !== '')
                         {{-- <div class="row" id="imagePreview"><img src="{{ asset('storage/restaurants/'. $restaurant->image) }}" class="mb-3"></div> --}}
                         {{-- <div class="row" id="imagePreview"><img src="{{ asset($restaurant->image) }}" alt="{{ $restaurant->name }}"class="mb-3"></div>  --}}
-                        <div class="row" id="imagePreview"><img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" alt="{{ $restaurant->name }}" class="mb-3"></div> 
+                        <div class="row" id="imagePreview">
+                            {{-- <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" alt="{{ $restaurant->name }}" class="mb-3"> --}}
+                            <img src="{{ Storage::disk('s3')->url('restaurants/' . $restaurant->image) }}" alt="Restaurant Image" class="mb-3">
+
+                        </div> 
                     
                         @else
                         <div class="row" id="imagePreview"></div>
