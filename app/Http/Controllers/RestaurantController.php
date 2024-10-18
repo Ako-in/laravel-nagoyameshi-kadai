@@ -68,11 +68,11 @@ class RestaurantController extends Controller
             
         }elseif($category_id !== null){
 
-            $restaurants = $restaurants->whereHas('categories', function($query) use ($category_id) {
+            $restaurants = Restaurant::whereHas('categories', function($query) use ($category_id) {
                 $query->where('categories.id',$category_id);
             })
-            ->sortable($sort_query)
-            ->orderBy('created_at','desc')
+            // ->sortable($sort_query)
+            // ->orderBy('created_at','desc')
             // ->orderBy('reviews_count', 'desc')
             ->paginate(15);
     

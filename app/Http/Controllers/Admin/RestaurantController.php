@@ -45,7 +45,7 @@ class RestaurantController extends Controller
     public function store(Request $request)
     {
         //バリデーション設定
-        $request->validate([
+        $request->validate([    
            'name' =>'required|string|max:255',
            'description' =>'required',
            'lowest_price' =>'required|integer',
@@ -146,8 +146,6 @@ class RestaurantController extends Controller
      */
     public function update($id,Request $request)
     {
-        // dd('111');
-        // Log::info('111111');
         //バリデーション設定
         $request->validate([
             'category_ids' => 'required|array|max:3',  // カテゴリのバリデーション
@@ -162,32 +160,16 @@ class RestaurantController extends Controller
         $restaurant->opening_time = $request->input('opening_time');
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
-        // dd('111');
+
         if($request->hasFile('image')){
-            // // 画像を保存してそのパスを取得
-            // $imagePath = $request->file('image')->store('public/restaurants');
-            // // データベースに保存するパスを修正
-            // $restaurant->image = str_replace('public/', 'storage/restaurants', $imagePath);
             $image = $request->file('image')->store('public/restaurants');
-            // dd($image);
             $restaurant->image = basename($image);
-            
-            // dd($restaurant->image); // 保存されたパスを確認する
 
-
-            // $restaurant->image = base64_encode(file_get_contents($request->file('image')->getRealPath()));
-            // $file = $request->file('image')->store('storage/restaurants');
-            // dd('111');
-            // Log::info('222222');
         }
         $restaurant->save();
-        // Log::info('333333');
+
         $category_ids = array_filter($request->input('category_ids'));
         $restaurant->categories()->sync($category_ids);
-        
-        // $regular_holidays_ids = array_filter($request->input('regular_holidays_ids') ?? []);
-        // // $request->input('regular_holidays_ids')が nullかどうかを確認し、nullの場合には空の配列を代わりに使用するように条件分岐を追加
-        // $restaurant->regular_holidays()->sync($regular_holidays_ids);
         
         $regular_holiday_ids = array_filter($request->input('regular_holiday_ids',[]));
         $restaurant->regular_holidays()->sync($regular_holiday_ids);

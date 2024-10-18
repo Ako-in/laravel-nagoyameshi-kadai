@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
 use App\Models\Category;
+use App\Models\CategoryRestaurant;
 
 class HomeController extends Controller
 {
@@ -41,10 +42,12 @@ class HomeController extends Controller
     // /**
     //  * Display the specified resource.
     //  */
-    // public function show(string $id)
-    // {
-    //     //
-    // }
+    public function show(Restaurant $restaurant, Category $category)
+    {
+        // $categories = CategoryRestaurant::all();
+        $categories = Category::with('cateogries')->find($id);
+        return view('restaurants/show',compact('categories'));
+    }
 
     // /**
     //  * Show the form for editing the specified resource.

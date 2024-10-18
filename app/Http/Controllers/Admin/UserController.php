@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\User; // 追加
 use Illuminate\Support\Facades\DB;
 
-
-
-
 class UserController extends Controller
 {
     public function index(Request $request){
@@ -28,7 +25,9 @@ class UserController extends Controller
     }
 
     public function show($id){ 
-        $users = User::where('id',$id)->get();
-        return view('admin.users.show',compact('users','id'));
+        // $users = User::where('id',$id)->get();
+        $user = User::findOrFail($id); // 指定されたIDに基づいてユーザーを取得
+
+        return view('admin.users.show',compact('user'));
     }
 }
