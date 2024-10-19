@@ -38,7 +38,9 @@
 
                 <div class="mb-2">
                     @if ($restaurant->image !== '')
-                        <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" class="w-100">
+                        <img src="{{ Storage::disk('s3')->url('restaurants/' . $restaurant->image) }}" alt="Restaurant Image" class="w-100">
+
+                        {{-- <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" class="w-100"> --}}
                     @else
                         <img src="{{ asset('/images/no_image.jpg') }}" class="w-100">
                     @endif

@@ -78,9 +78,9 @@ class RestaurantController extends Controller
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
         if ($request->hasFile('image')) {
             $image = $request->file('image')->store('restaurants', 's3');
-            // $restaurant->image = basename(r$image);
+            $restaurant->image = basename($image);
             // dd($image);
-            $restaurant->image = Storage::disk('s3')->url($image);
+            // $restaurant->image = Storage::disk('s3')->url($image);
             
         }else{
             $restaurant->image = '';
@@ -159,9 +159,9 @@ class RestaurantController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image')->store('restaurants', 's3');
-            // $restaurant->image = basename($image);
+            $restaurant->image = basename($image);
             // dd($image);
-            $restaurant->image = Storage::disk('s3')->url($image);
+            // $restaurant->image = Storage::disk('s3')->url($image);
         }
 
         $restaurant->save();
