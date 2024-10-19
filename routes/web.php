@@ -86,7 +86,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
 
 // });
 // Route::get('restaurants/index',[RestaurantController::class,'index'])->name('restaurants.index');
-Route::get('restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
+Route::get('restaurants/index', [RestaurantController::class, 'index'])->name('restaurants.index');
 
 Route::get('restaurants/{restaurant}',[RestaurantController::class,'show'])->name('restaurants.show');
 

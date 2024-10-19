@@ -68,7 +68,7 @@ class RestaurantController extends Controller
             
         }elseif($category_id !== null){
 
-            $restaurants = $restaurant->whereHas('categories', function($query) use ($category_id) {
+            $restaurants = Restaurant::whereHas('categories', function($query) use ($category_id) {
                 $query->where('categories.id',$category_id);
             });
             // ->sortable($sort_query)
