@@ -79,7 +79,7 @@ class RestaurantController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = basename($image);
-            dd($image);
+            // dd($image);
             // $restaurant->image = Storage::disk('s3')->url($image);
             
         }else{
@@ -157,14 +157,13 @@ class RestaurantController extends Controller
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
 
-        if($request->hasFile('image')){
-            // // 画像を保存してそのパスを取得
+        if ($request->hasFile('image')) {
             $image = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = basename($image);
             // dd($image);
             // $restaurant->image = Storage::disk('s3')->url($image);
-
         }
+
         $restaurant->save();
 
         $category_ids = array_filter($request->input('category_ids'));
