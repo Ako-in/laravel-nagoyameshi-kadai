@@ -79,7 +79,7 @@ class RestaurantController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = basename($image);
-            // dd($image);
+            Log::info($image);
             // $restaurant->image = Storage::disk('s3')->url($image);
             
         }else{
@@ -160,7 +160,7 @@ class RestaurantController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = basename($image);
-            // dd($image);
+            Log::info($image);
             // $restaurant->image = Storage::disk('s3')->url($image);
         }
 
