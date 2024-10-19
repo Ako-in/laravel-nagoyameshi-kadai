@@ -192,6 +192,7 @@ class RestaurantController extends Controller
         // dd('555');
         $restaurant->save();
         // dd($restaurant);
+        // dd($restaurant);<-画像ファイル名があること確認済み。S3バケットにも同じ名前のファイルが存在している
         $category_ids = array_filter($request->input('category_ids'));
         $restaurant->categories()->sync($category_ids);
         
