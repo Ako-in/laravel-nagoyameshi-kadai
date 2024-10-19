@@ -119,9 +119,9 @@ class ReservationController extends Controller
             return to_route('reservation.index',['restaurant' => $restaurant->id])->with('error_message','不正なアクセスです。');
         }
         // 予約削除機能: IDに基づいて予約を取得
-        $reservation = Reservation::find($reservationId);
-        // ->where('restaurant_id', $restaurant->id)
-        // ->firstOrFail();
+        $reservation = Reservation::find($reservationId)
+        ->where('restaurant_id', $restaurant->id)
+        ->firstOrFail();
         // $reservation = Reservation::where('id', $reservationId)->where('restaurant_id', $restaurant->id)->first();
         //予約削除機能
         // Log::info($reservation);

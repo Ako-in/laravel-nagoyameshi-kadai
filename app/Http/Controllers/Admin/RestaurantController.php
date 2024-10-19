@@ -52,7 +52,7 @@ class RestaurantController extends Controller
            'description' =>'required',
            'lowest_price' =>'required|integer',
            'highest_price' =>'required|integer',
-           'postal_code' =>'required|string',
+           'postal_code' =>'required|string|digits:7',
            'address' =>'required|string',
            'opening_time' =>'required',
            'closing_time' =>'required|date_format:H:i|after:opening_time',
@@ -78,6 +78,7 @@ class RestaurantController extends Controller
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
         var_dump('111');
         if ($request->hasFile('image')) {
+            
             $image = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = basename($image);
             var_dump('222');
@@ -146,6 +147,20 @@ class RestaurantController extends Controller
         //バリデーション設定
         $request->validate([
             'category_ids' => 'required|array|max:3',  // カテゴリのバリデーション
+
+            'name' =>'required|string|max:255',
+            'description' =>'required',
+            'lowest_price' =>'required|integer',
+            'highest_price' =>'required|integer',
+            'postal_code' =>'required|string|digits:7',
+            'address' =>'required|string',
+            'opening_time' =>'required',
+            'closing_time' =>'required|date_format:H:i|after:opening_time',
+            'seating_capacity' =>'required|between:0,200|integer',
+
+        //    'regular_holidays'=>'required',
+            'image'=>'image|max:2048',
+
         ]);
         $restaurant = Restaurant::where('id',$id)->first();
         $restaurant->name = $request->input('name');
@@ -158,15 +173,22 @@ class RestaurantController extends Controller
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
         var_dump('333');
+        // if ($request->hasFile('image')) {
+            
+        //     $image = $request->file('image')->store('restaurants', 's3');
+        //     // $restaurant->image = basename($image);
+        //     $restaurant->image = Storage::disk('s3')->url($image);
+        // }
         if ($request->hasFile('image')) {
-            $image = $request->file('image')->store('restaurants', 's3');
-            $restaurant->image = basename($image);
-            var_dump('444');
-            // $restaurant->image = Storage::disk('s3')->url($image);
+            $path = $request->file('image')->store('restaurants', 's3');
+            $restaurant->image = $path;
+        } else {
+            $restaurant->image = '';
         }
 
+        var_dump('555');
         $restaurant->save();
-
+        var_dump('666');
         $category_ids = array_filter($request->input('category_ids'));
         $restaurant->categories()->sync($category_ids);
         
