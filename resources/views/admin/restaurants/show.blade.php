@@ -48,7 +48,7 @@
                 <div class="mb-2">
                     @if ($restaurant->image !== '')
                     <div class="mb-2">
-                        @if ($restaurant->image !== '')
+                        {{-- @if ($restaurant->image !== '') --}}
                             {{-- <img src="{{ asset('storage/restaurants/' . $restaurant->image) }}" class="w-100"> --}}
                             {{-- <img src="{{ asset($restaurant->image) }}" alt="{{ $restaurant->name }}"class="w-100"> --}}
                             {{-- <img src="{{ Storage::url($restaurant->image) }}" alt="{{ $restaurant->name }}"class="w-100"> --}}
@@ -57,10 +57,10 @@
 
                             @else
                             <img src="{{ asset('/images/no_image.jpg') }}" class="w-100">
-                        @endif
+                        {{-- @endif --}}
                     </div>
-                    @else
-                        <img src="{{ asset('/images/no_image.jpg') }}" class="w-100">
+                    {{-- @else
+                        <img src="{{ asset('/images/no_image.jpg') }}" class="w-100"> --}}
                     @endif
                 </div>
 

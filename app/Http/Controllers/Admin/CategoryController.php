@@ -61,25 +61,38 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    // public function edit(string $id)
-    // {
-    //     //
-    // }
+    public function edit(string $id)
+    {
+        return view('admin.categories.edit');
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'name' => 'required',
+        ]);
         $category = Category::where('id',$id)->first();
         $category->name = $request->input('name');
         $category->save();
-        // $regular_holiday_ids = RegularHoliday::where('id',$id)->first();
-        // $restaurant->regular_holiday_ids = $request->input('day');
-        // $regular_holiday_restaurant->save();
+        Log::info('カテゴリが更新されました: ', ['category' => $category]);
         //リダイレクトさせる
         return redirect()->route('admin.categories.index', ['category' => $id,'regular_holiday'=> $id])->with('flash_message', 'カテゴリを編集しました。');
     }
+
+
+    // public function update(Request $request, Category $category) {
+    //     $request->validate([
+    //         'name' => 'required',
+    //     ]);
+
+    //     $category->name = $request->input('name');
+    //     $category->save();
+
+    //     return redirect()->route('admin.categories.index')->with('flash_message', 'カテゴリを編集しました。');
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -88,6 +101,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
+        dd($category);
         return to_route('admin.categories.index')->with('flash_message','カテゴリを削除しました。');
     }
 }

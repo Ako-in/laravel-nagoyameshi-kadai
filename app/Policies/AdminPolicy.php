@@ -15,7 +15,18 @@ class AdminPolicy
     //     //
     // }
 
-    public function update(Admin $admin, User $user)
+    // public function update(Admin $admin, User $user)
+    // {
+    //     // 管理者がユーザーを更新できるかどうかのロジック
+    //     return true; // 例えば常に許可する場合
+    // }
+    public function update(Admin $admin)
+    {
+        // 管理者がユーザーを更新できるかどうかのロジック
+        return true; // 例えば常に許可する場合
+    }
+
+    public function destroy(Admin $admin)
     {
         // 管理者がユーザーを更新できるかどうかのロジック
         return true; // 例えば常に許可する場合

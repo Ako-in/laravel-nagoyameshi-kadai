@@ -62,7 +62,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.','middleware'=>'auth:admin'],funct
     Route::post('categories/',[Admin\CategoryController::class,'store'])->name('categories.store');
     Route::put('categories/{category}',[Admin\CategoryController::class,'update'])->name('categories.update');
     Route::get('categories/{category}/edit',[Admin\CategoryController::class,'edit'])->name('categories.edit');
-    
+    Route::delete('categories/{category}',[Admin\CategoryController::class,'destroy'])->name('categories.destroy');
     // Route::resource('categories',Admin\CategoryController::class);
 
     // Route::resource('company', Admin\CompanyController::class)->only(['index', 'edit', 'update']);

@@ -74,7 +74,7 @@ class RestaurantController extends Controller
         $restaurant->opening_time = $request->input('opening_time');
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
-        // dd('111');
+        dd('111');
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
         var_dump('111');
         if ($request->hasFile('image')) {
@@ -172,7 +172,8 @@ class RestaurantController extends Controller
         $restaurant->opening_time = $request->input('opening_time');
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
-        var_dump('333');
+        // var_dump('333');
+        // dd('333');
         // if ($request->hasFile('image')) {
             
         //     $image = $request->file('image')->store('restaurants', 's3');
@@ -182,13 +183,15 @@ class RestaurantController extends Controller
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = $path;
+            // dd('444');
+            // dd($restaurant->image);
         } else {
             $restaurant->image = '';
         }
 
-        var_dump('555');
+        // dd('555');
         $restaurant->save();
-        var_dump('666');
+        // dd($restaurant);
         $category_ids = array_filter($request->input('category_ids'));
         $restaurant->categories()->sync($category_ids);
         
