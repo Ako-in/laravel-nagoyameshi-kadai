@@ -23,7 +23,7 @@
                         カテゴリから探す
                     </div>
                     <div class="card-body">
-                        <form method="GET" action="{{ route('restaurants.index', ['category_id' => $category->id]) }}" class="w-100">
+                        <form method="GET" action="{{ route('restaurants.index') }}" class="w-100">
                             <div class="form-group mb-3">
                                 <select class="form-control form-select" name="category_id" required>
                                     <option value="" hidden>選択してください</option>

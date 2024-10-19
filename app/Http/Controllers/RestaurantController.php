@@ -68,14 +68,15 @@ class RestaurantController extends Controller
             
         }elseif($category_id !== null){
 
-            $restaurants = Restaurant::whereHas('categories', function($query) use ($category_id) {
+            $restaurants = $restaurant->whereHas('categories', function($query) use ($category_id) {
                 $query->where('categories.id',$category_id);
-            })
+            });
             // ->sortable($sort_query)
             // ->orderBy('created_at','desc')
             // ->orderBy('reviews_count', 'desc')
-            ->paginate(15);
-    
+            // ->paginate(15);
+            // ページネーション
+            $restaurants = $restaurants->paginate(15);
             $total = $restaurants->total(); // paginate() から total を取得
 
         }elseif($price !== null){
@@ -90,6 +91,7 @@ class RestaurantController extends Controller
             // $restaurants = Restaurant::orderByRaw($sorted,'desc')->paginate(15);
             $total = $restaurants->total();
         }
+        
         return view('restaurants.index',compact('restaurants','keyword','total','category_id','price','sorts','sorted','sort_query','categories'));
     }
 
