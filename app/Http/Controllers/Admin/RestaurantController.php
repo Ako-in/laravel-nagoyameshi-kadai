@@ -76,10 +76,11 @@ class RestaurantController extends Controller
         $restaurant->seating_capacity = $request->input('seating_capacity');
         // dd('111');
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
+        log::info('111');
         if ($request->hasFile('image')) {
             $image = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = basename($image);
-            Log::info($image);
+            Log::info('222');
             // $restaurant->image = Storage::disk('s3')->url($image);
             
         }else{
@@ -156,11 +157,11 @@ class RestaurantController extends Controller
         $restaurant->opening_time = $request->input('opening_time');
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
-
+        log::info('333');
         if ($request->hasFile('image')) {
             $image = $request->file('image')->store('restaurants', 's3');
             $restaurant->image = basename($image);
-            Log::info($image);
+            Log::info('444');
             // $restaurant->image = Storage::disk('s3')->url($image);
         }
 
