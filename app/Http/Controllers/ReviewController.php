@@ -102,7 +102,7 @@ class ReviewController extends Controller
         $review = Review::all();
 
         if (!$restaurant) {
-            return redirect()->route('restaurants.index')->with('error', '店舗が見つかりません。');
+            return redirect()->route('restaurants/')->with('error', '店舗が見つかりません。');
         }
 
         return view('restaurants.show', compact('restaurant','review'));

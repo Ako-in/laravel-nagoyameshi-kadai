@@ -36,7 +36,7 @@
                 </div>
                 <form action="" method="post" name="editCategoryForm">
                     @csrf
-                    @method('patch')
+                    @method('put')
                     <div class="modal-body">
                         <input type="text" class="form-control" name="name" value="">
                     </div>
@@ -134,4 +134,7 @@
             </div>
         </div>
     </div>
+    <script>
+        let category-id = $().data('category-id');
+    </script>
 @endsection

@@ -16,6 +16,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->input('keyword');
+
         If($keyword !== null){
             $categories = Category::where('name','like',"%{$keyword}%")->paginate(15);
         }else{
@@ -69,19 +70,20 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, Category $category){
+        // dd($request->input());
         $request->validate([
             'name' => 'required',
         ]);
-        $category = Category::where('id',$id)->first();
+            //  dd($category);
+        $category = Category::where('id',$category->id)->first();
         $category->name = $request->input('name');
         $category->save();
-        Log::info('カテゴリが更新されました: ', ['category' => $category]);
+        // var_dump('category_update');
+        // Log::info('カテゴリが更新されました: ', ['category' => $category]);
         //リダイレクトさせる
-        return redirect()->route('admin.categories.index', ['category' => $id,'regular_holiday'=> $id])->with('flash_message', 'カテゴリを編集しました。');
+        return redirect()->route('admin.categories.index',['category'=>$category->id])->with('flash_message', 'カテゴリを編集しました。');
     }
-
 
     // public function update(Request $request, Category $category) {
     //     $request->validate([
@@ -101,7 +103,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        dd($category);
+        // dd($category);
         return to_route('admin.categories.index')->with('flash_message','カテゴリを削除しました。');
     }
 }

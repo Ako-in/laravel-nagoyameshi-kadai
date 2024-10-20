@@ -15,6 +15,6 @@ class Category extends Model
     // ];
     protected $guarded = ['id'];
     public function restaurants(){
-        return $this->belongsToMany(Restaurant::class,'category_restaurants');
+        return $this->belongsToMany(Restaurant::class,'category_restaurants','category_id', 'restaurant_id');
     }
 }

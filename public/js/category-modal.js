@@ -13,7 +13,7 @@ document.getElementById('editCategoryModal').addEventListener('show.bs.modal', (
   let categoryId = editButton.dataset.categoryId;
   let categoryName = editButton.dataset.categoryName;
 
-  editCategoryForm.action = `categories/${categoryId}`;
+  editCategoryForm.action = `${categoryId}`;
   editCategoryForm.name.value = categoryName;
 });
 
@@ -23,6 +23,6 @@ document.getElementById('deleteCategoryModal').addEventListener('show.bs.modal',
   let categoryId = deleteButton.dataset.categoryId;
   let categoryName = deleteButton.dataset.categoryName;
 
-  deleteCategoryForm.action = `categories/${categoryId}`;
+  deleteCategoryForm.action = `${categoryId}`;
   deleteMessage.textContent = `「${categoryName}」を削除してもよろしいですか？`
 });

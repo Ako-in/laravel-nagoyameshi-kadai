@@ -104,7 +104,7 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::with('reviews')->find($id);
         // レストランが存在しない場合の処理
         if (!$restaurant) {
-            return redirect()->route('restaurants.index')->with('error', '店舗が見つかりません。');
+            return redirect()->route('restaurants')->with('error', '店舗が見つかりません。');
         }
         $categories = $restaurant->categories; // Restaurantモデルにcategoriesリレーションがあると仮定
 

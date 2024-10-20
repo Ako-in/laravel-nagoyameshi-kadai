@@ -90,10 +90,10 @@
             @endforeach
         </div>
 
-        <h2 class="mb-3">カテゴリから探す</h2>
+        {{-- <h2 class="mb-3">カテゴリから探す</h2>
         <div class="row row-cols-xl-6 row-cols-md-3 row-cols-2 g-3 mb-3">
             <div class="col">
-                <a href="{{ url("/restaurants/?category_id={$categories->where('name', '和食')->value('id')}") }}" class="nagoyameshi-card-link">
+                <a href="{{ url("/restaurants?category_id={$categories->where('name', '和食')->value('id')}") }}" class="nagoyameshi-card-link">
                     <div class="card text-white">
                         <img src="{{ asset('/images/washoku.jpg') }}" class="card-img nagoyameshi-vertical-card-image" alt="和食">
                         <div class="card-img-overlay d-flex justify-content-center align-items-center nagoyameshi-overlay-background">
@@ -157,8 +157,8 @@
                     </div>
                 </a>
             </div>
-        </div>
-        <div class="mb-5">
+        </div> --}}
+        {{-- <div class="mb-5">
             @foreach ($categories as $category)
                 @if ($category->name === '和食' || $category->name === 'うどん' || $category->name === '丼物' || $category->name === 'ラーメン' || $category->name === 'おでん' || $category->name === '揚げ物')
                     @continue
@@ -166,7 +166,7 @@
                     <a href="{{ url("/restaurants/?category_id={$category->id}") }}" class="btn btn-outline-secondary btn-sm me-1 mb-2">{{ $category->name }}</a>
                 @endif
             @endforeach
-        </div>
+        </div> --}}
 
         <h2 class="mb-3">新規掲載店</h2>
         <div class="row row-cols-xl-6 row-cols-md-3 row-cols-2 g-3 mb-5">
