@@ -74,9 +74,9 @@ class RestaurantController extends Controller
         $restaurant->opening_time = $request->input('opening_time');
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
-        dd('111');
+        // dd('111');
         // アップロードされたファイル（name="image"）が存在すれば処理を実行する
-        var_dump('111');
+        // var_dump('111');
         if ($request->hasFile('image')) {
             
             $image = $request->file('image')->store('restaurants', 's3');
